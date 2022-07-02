@@ -16,6 +16,14 @@ type S3ListBucketsAPI interface {
 		optFns ...func(*s3.Options)) (*s3.ListBucketsOutput, error)
 }
 
+type S3BucketsName struct {
+	List []string
+}
+
+func (m *S3BucketsName) Set(value string) {
+	m.List = append(m.List, value)
+}
+
 func chooseValueFromPrompt(l string, d string) string {
 	prompt := promptui.Prompt{
 		Label:   l,
@@ -67,8 +75,11 @@ func main() {
 
 	fmt.Println("Buckets:")
 
+	ss := new(S3BucketsName)
 	for _, bucket := range result.Buckets {
-		fmt.Println(*bucket.Name + ": " + bucket.CreationDate.Format("2006-01-02 15:04:05 Monday"))
+		ss.Set(*bucket.Name)
 	}
+
+	chooseValueFromPromptItems("Select S3 Buckets", ss.List)
 }
 
