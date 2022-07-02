@@ -16,6 +16,12 @@ type S3ListBucketsAPI interface {
 		optFns ...func(*s3.Options)) (*s3.ListBucketsOutput, error)
 }
 
+type S3ListObjectsAPI interface {
+	ListObjectsV2(ctx context.Context,
+		params *s3.ListObjectsV2Input,
+		optFns ...func(*s3.Options)) (*s3.ListObjectsV2Output, error)
+}
+
 type S3BucketsName struct {
 	List []string
 }
@@ -53,6 +59,10 @@ func GetAllBuckets(c context.Context, api S3ListBucketsAPI, input *s3.ListBucket
 	return api.ListBuckets(c, input)
 }
 
+func GetObjects(c context.Context, api S3ListObjectsAPI, input *s3.ListObjectsV2Input) (*s3.ListObjectsV2Output, error) {
+	return api.ListObjectsV2(c, input)
+}
+
 func main() {
 	aws_region := chooseValueFromPrompt("Please enter aws region(Default: ap-northeast-1)", "ap-northeast-1")
 	aws_profile := chooseValueFromPrompt("Please enter aws profile(If empty, default settings are loaded)", "")
@@ -64,6 +74,7 @@ func main() {
 
 	client := s3.NewFromConfig(cfg)
 
+	// 全てのバケットを取得
 	input := &s3.ListBucketsInput{}
 
 	result, err := GetAllBuckets(context.TODO(), client, input)
@@ -73,13 +84,27 @@ func main() {
 		return
 	}
 
-	fmt.Println("Buckets:")
-
 	ss := new(S3BucketsName)
 	for _, bucket := range result.Buckets {
 		ss.Set(*bucket.Name)
 	}
 
-	chooseValueFromPromptItems("Select S3 Buckets", ss.List)
-}
+	select_bucket := chooseValueFromPromptItems("Select S3 Buckets", ss.List)
 
+	// 上で選択したバケット内のオブジェクトの取得
+	bucket_input := &s3.ListObjectsV2Input{
+		Bucket: &select_bucket,
+	}
+
+	resp, err := GetObjects(context.TODO(), client, bucket_input)
+	if err != nil {
+		fmt.Println("Got error retrieving list of objects:")
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("Objects in " + select_bucket + ":")
+	for _, item := range resp.Contents {
+		fmt.Println("Name:", *item.Key, " | ", "Last modified:", *item.LastModified, " | ", "Size:", item.Size, " | ", "Storage:", item.StorageClass)
+	}
+}
