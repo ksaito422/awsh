@@ -1,4 +1,4 @@
-package pkg
+package s3
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 
-	"awsh/libs"
+	"awsh/pkg/prompt"
 )
 
 type S3ListBucketsAPI interface {
@@ -29,7 +29,7 @@ func GetAllBuckets(c context.Context, api S3ListBucketsAPI, input *s3.ListBucket
 }
 
 // aws s3 ls
-func S3ListBuckets(cfg aws.Config) string {
+func ListBuckets(cfg aws.Config) string {
 	client := s3.NewFromConfig(cfg)
 
 	input := &s3.ListBucketsInput{}
@@ -46,7 +46,7 @@ func S3ListBuckets(cfg aws.Config) string {
 		ss.Set(*bucket.Name)
 	}
 
-	select_bucket := libs.ChooseValueFromPromptItems("Select S3 Buckets", ss.List)
+	select_bucket := prompt.ChooseValueFromPromptItems("Select S3 Buckets", ss.List)
 
 	return select_bucket
 }
