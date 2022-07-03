@@ -6,38 +6,13 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/manifoldco/promptui"
+	"awsh/libs"
 )
 
-func chooseValueFromPrompts(l string, d string) string {
-	prompt := promptui.Prompt{
-		Label:   l,
-		Default: d,
-	}
-	v, err := prompt.Run()
-	if err != nil {
-		log.Fatalf("Prompt failed %v\n", err)
-	}
-	return v
-}
-
-func chooseValueFromPromptsItems(l string, i []string) string {
-	prompt := promptui.Select{
-		Label: l,
-		Items: i,
-	}
-	_, v, err := prompt.Run()
-	if err != nil {
-		log.Fatalf("Prompt failed %v\n", err)
-	}
-
-	return v
-}
-
 func Cfg() aws.Config {
-	aws_region := chooseValueFromPromptsItems("Select aws region", []string{"ap-northeast-1", "other"})
+	aws_region := libs.ChooseValueFromPromptItems("Select aws region", []string{"ap-northeast-1", "other"})
 	if aws_region == "other" {
-		aws_region = chooseValueFromPromptsItems("Select aws region", []string{
+		aws_region = libs.ChooseValueFromPromptItems("Select aws region", []string{
 			"us-east-2",
 			"us-east-1",
 			"us-west-1",
@@ -64,7 +39,7 @@ func Cfg() aws.Config {
 		})
 	}
 
-	aws_profile := chooseValueFromPrompts("Please enter aws profile(If empty, default settings are loaded)", "")
+	aws_profile := libs.ChooseValueFromPrompt("Please enter aws profile(If empty, default settings are loaded)", "")
 	
 	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(aws_region), config.WithSharedConfigProfile(aws_profile))
 	if err != nil {
