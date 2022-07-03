@@ -1,4 +1,4 @@
-package pkg
+package s3
 
 import (
 	"context"
@@ -29,7 +29,7 @@ func GetAllBuckets(c context.Context, api S3ListBucketsAPI, input *s3.ListBucket
 }
 
 // aws s3 ls
-func S3ListBuckets(cfg aws.Config) string {
+func ListBuckets(cfg aws.Config) string {
 	client := s3.NewFromConfig(cfg)
 
 	input := &s3.ListBucketsInput{}

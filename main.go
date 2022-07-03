@@ -2,11 +2,12 @@ package main
 
 import (
 	"awsh/pkg"
+	"awsh/pkg/s3"
 )
 
 func main() {
 	cfg := pkg.Cfg()
 
-	select_bucket := pkg.S3ListBuckets(cfg)
-	pkg.S3ListObjects(cfg, select_bucket)
+	select_bucket := s3.ListBuckets(cfg)
+	s3.ListObjects(cfg, select_bucket)
 }

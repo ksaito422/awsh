@@ -1,4 +1,4 @@
-package pkg
+package s3
 
 import (
 	"context"
@@ -18,7 +18,7 @@ func GetObjects(c context.Context, api S3ListObjectsAPI, input *s3.ListObjectsV2
 	return api.ListObjectsV2(c, input)
 }
 
-func S3ListObjects (cfg aws.Config, select_bucket string) {
+func ListObjects (cfg aws.Config, select_bucket string) {
 	client := s3.NewFromConfig(cfg)
 	// 上で選択したバケット内のオブジェクトの取得
 	bucket_input := &s3.ListObjectsV2Input{
