@@ -7,7 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 
-	"awsh/libs"
+	"awsh/pkg/prompt"
 )
 
 type S3ListBucketsAPI interface {
@@ -46,7 +46,7 @@ func S3ListBuckets(cfg aws.Config) string {
 		ss.Set(*bucket.Name)
 	}
 
-	select_bucket := libs.ChooseValueFromPromptItems("Select S3 Buckets", ss.List)
+	select_bucket := prompt.ChooseValueFromPromptItems("Select S3 Buckets", ss.List)
 
 	return select_bucket
 }

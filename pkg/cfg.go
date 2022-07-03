@@ -6,13 +6,13 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
-	"awsh/libs"
+	"awsh/pkg/prompt"
 )
 
 func Cfg() aws.Config {
-	aws_region := libs.ChooseValueFromPromptItems("Select aws region", []string{"ap-northeast-1", "other"})
+	aws_region := prompt.ChooseValueFromPromptItems("Select aws region", []string{"ap-northeast-1", "other"})
 	if aws_region == "other" {
-		aws_region = libs.ChooseValueFromPromptItems("Select aws region", []string{
+		aws_region = prompt.ChooseValueFromPromptItems("Select aws region", []string{
 			"us-east-2",
 			"us-east-1",
 			"us-west-1",
@@ -39,7 +39,7 @@ func Cfg() aws.Config {
 		})
 	}
 
-	aws_profile := libs.ChooseValueFromPrompt("Please enter aws profile(If empty, default settings are loaded)", "")
+	aws_profile := prompt.ChooseValueFromPrompt("Please enter aws profile(If empty, default settings are loaded)", "")
 	
 	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(aws_region), config.WithSharedConfigProfile(aws_profile))
 	if err != nil {
