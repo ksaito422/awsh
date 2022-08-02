@@ -1,15 +1,17 @@
 package main
 
 import (
+	"awsh/internal/controller"
+	"awsh/internal/route"
 	"awsh/internal/welcome"
 	"awsh/pkg/config"
-	"awsh/pkg/s3"
 )
 
 func main() {
 	welcome.Main()
 	cfg := config.Cfg()
 
-	select_bucket := s3.ListBuckets(cfg)
-	s3.ListObjects(cfg, select_bucket)
+	// 操作対象のリソースとアクションを選択して、メインの処理は各パッケージで実行
+	select_action := route.Main()
+	controller.Main(cfg, select_action)
 }
