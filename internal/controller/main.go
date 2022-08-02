@@ -24,6 +24,7 @@ func Main(cfg aws.Config, action string) {
 		}
 
 	case "GetObject":
+		// TODO: オブジェクト取得の処理を追加する
 		fmt.Println("select: ", action)
 	}
 }
