@@ -3,9 +3,12 @@ package s3
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+
+	"awsh/pkg/prompt"
 )
 
 type S3ListObjectsAPI interface {
@@ -14,28 +17,26 @@ type S3ListObjectsAPI interface {
 		optFns ...func(*s3.Options)) (*s3.ListObjectsV2Output, error)
 }
 
-func GetObjects(c context.Context, api S3ListObjectsAPI, input *s3.ListObjectsV2Input) (*s3.ListObjectsV2Output, error) {
+func GetAllObjects(c context.Context, api S3ListObjectsAPI, input *s3.ListObjectsV2Input) (*s3.ListObjectsV2Output, error) {
 	return api.ListObjectsV2(c, input)
 }
 
-func ListObjects (cfg aws.Config, select_bucket string) {
+// aws s3 list-object
+func ListObjects(cfg aws.Config, buckets []string) (*s3.ListObjectsV2Output, string) {
+	select_bucket := prompt.ChooseValueFromPromptItems("Select S3 Buckets", buckets)
+
 	client := s3.NewFromConfig(cfg)
 	// 上で選択したバケット内のオブジェクトの取得
 	bucket_input := &s3.ListObjectsV2Input{
 		Bucket: &select_bucket,
 	}
 
-	resp, err := GetObjects(context.TODO(), client, bucket_input)
+	resp, err := GetAllObjects(context.TODO(), client, bucket_input)
 	if err != nil {
 		fmt.Println("Got error retrieving list of objects:")
 		fmt.Println(err)
-		return
+		os.Exit(1)
 	}
 
-	fmt.Println("Objects in " + select_bucket + ":")
-	for _, item := range resp.Contents {
-		fmt.Println("Name:", *item.Key, " | ", "Last modified:", *item.LastModified, " | ", "Size:", item.Size, " | ", "Storage:", item.StorageClass)
-	}
-
+	return resp, select_bucket
 }
-
