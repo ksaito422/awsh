@@ -17,7 +17,7 @@ type S3ListObjectsAPI interface {
 		optFns ...func(*s3.Options)) (*s3.ListObjectsV2Output, error)
 }
 
-func GetObjects(c context.Context, api S3ListObjectsAPI, input *s3.ListObjectsV2Input) (*s3.ListObjectsV2Output, error) {
+func GetAllObjects(c context.Context, api S3ListObjectsAPI, input *s3.ListObjectsV2Input) (*s3.ListObjectsV2Output, error) {
 	return api.ListObjectsV2(c, input)
 }
 
@@ -31,7 +31,7 @@ func ListObjects(cfg aws.Config, buckets []string) (*s3.ListObjectsV2Output, str
 		Bucket: &select_bucket,
 	}
 
-	resp, err := GetObjects(context.TODO(), client, bucket_input)
+	resp, err := GetAllObjects(context.TODO(), client, bucket_input)
 	if err != nil {
 		fmt.Println("Got error retrieving list of objects:")
 		fmt.Println(err)

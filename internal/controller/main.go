@@ -3,6 +3,7 @@ package controller
 import (
 	"awsh/pkg/s3"
 	"fmt"
+	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 )
@@ -24,7 +25,21 @@ func Main(cfg aws.Config, action string) {
 		}
 
 	case "GetObject":
-		// TODO: オブジェクト取得の処理を追加する
-		fmt.Println("select: ", action)
+		buckets := s3.ListBuckets(cfg)
+		objects, select_bucket := s3.ListObjects(cfg, buckets)
+		select_object := s3.GetObject(cfg, select_bucket, objects)
+		rc := select_object.Body
+		defer rc.Close()
+		buf := make([]byte, 10000)
+		_, err := rc.Read(buf)
+		if err != nil {
+			os.Exit(1)
+		}
+		fmt.Printf("%s", buf)
+
+	case "DownloadObject":
+		buckets := s3.ListBuckets(cfg)
+		objects, select_bucket := s3.ListObjects(cfg, buckets)
+		s3.DownloadObject(cfg, select_bucket, objects)
 	}
 }

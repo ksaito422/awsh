@@ -16,6 +16,7 @@ func Main() string {
 			"ListBuckets",
 			"ListObjects",
 			"GetObject",
+			"DownloadObject",
 		}
 
 		select_action = prompt.ChooseValueFromPromptItems("Select an action", actions)
