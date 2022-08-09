@@ -12,25 +12,27 @@ import (
 	"awsh/pkg/prompt"
 )
 
-type MyS3Client struct {
+type DownloadS3Client struct {
 	downloader *manager.Downloader
 	uploader   *manager.Uploader
 	client     *s3.Client
 }
 
-func NewMyS3Client(cfg aws.Config) *MyS3Client {
+// ファクトリー関数
+func NewDownloadS3Client(cfg aws.Config) *DownloadS3Client {
 	client := s3.NewFromConfig(cfg)
 	downloader := manager.NewDownloader(client)
 	uploader := manager.NewUploader(client)
 
-	return &MyS3Client{
+	return &DownloadS3Client{
 		downloader: downloader,
 		uploader:   uploader,
 		client:     client,
 	}
 }
 
-func (c *MyS3Client) DownloadSingleObject(bucket, key, filename string) {
+// s3オブジェクトのダウンロード処理
+func (c *DownloadS3Client) DownloadSingleObject(bucket, key, filename string) {
 	file, _ := os.Create(filename)
 	defer file.Close()
 
@@ -58,6 +60,6 @@ func DownloadObject(cfg aws.Config, bucket string, objects *s3.ListObjectsV2Outp
 	select_object := prompt.ChooseValueFromPromptItems("Select S3 Objects", ss.List)
 	fmt.Println(select_object)
 
-	client := NewMyS3Client(cfg)
+	client := NewDownloadS3Client(cfg)
 	client.DownloadSingleObject(bucket, select_object, select_object)
 }
