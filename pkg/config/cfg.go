@@ -2,45 +2,73 @@ package config
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"os"
+
+	"awsh/pkg/prompt"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
-	"awsh/pkg/prompt"
+	"github.com/aws/aws-sdk-go-v2/service/ec2"
 )
 
+type EC2DescribeRegionsAPI interface {
+	DescribeRegions(ctx context.Context,
+		params *ec2.DescribeRegionsInput,
+		optFns ...func(*ec2.Options)) (*ec2.DescribeRegionsOutput, error)
+}
+
+type regionName struct {
+	List []string
+}
+
+func (m *regionName) Set(value string) {
+	m.List = append(m.List, value)
+}
+
+// AWSがサポートしているRegionを取得する [aws ec2 describe-regions]
+func GetAllRegions(c context.Context, api EC2DescribeRegionsAPI, input *ec2.DescribeRegionsInput) (*ec2.DescribeRegionsOutput, error) {
+	return api.DescribeRegions(c, input)
+}
+
 func Cfg() aws.Config {
-	aws_region := prompt.ChooseValueFromPromptItems("Select aws region", []string{"ap-northeast-1", "other"})
-	if aws_region == "other" {
-		aws_region = prompt.ChooseValueFromPromptItems("Select aws region", []string{
-			"us-east-2",
-			"us-east-1",
-			"us-west-1",
-			"us-west-2",
-			"af-south-1",
-			"ap-east-1",
-			"ap-south-1",
-			"ap-northeast-3",
-			"ap-northeast-2",
-			"ap-southeast-1",
-			"ap-southeast-2",
-			"ap-northeast-1",
-			"ca-central-1",
-			"cn-north-1",
-			"cn-northwest-1",
-			"eu-central-1",
-			"eu-west-1",
-			"eu-west-2",
-			"eu-south-1",
-			"eu-west-3",
-			"eu-north-1",
-			"me-south-1",
-			"sa-east-1",
-		})
+	aws_profile := prompt.ChooseValueFromPrompt("Please enter aws profile(If empty, default settings are loaded)", "")
+
+	// 仮でIAMロールの認証情報を取得。ec2 describe-regionsで利用可能なリージョンを取得するため
+	ec2Cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion("us-east-1"))
+	if err != nil {
+		log.Fatalf("unable to load SDK config, %v", err)
 	}
 
-	aws_profile := prompt.ChooseValueFromPrompt("Please enter aws profile(If empty, default settings are loaded)", "")
-	
+	ec2Client := ec2.NewFromConfig(ec2Cfg)
+	input := &ec2.DescribeRegionsInput{}
+	resp, err := GetAllRegions(context.TODO(), ec2Client, input)
+	if err != nil {
+		fmt.Println("Got an error retrieving regions")
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	// region nameのslice作成
+	ss := new(regionName)
+	for _, region := range (*resp).Regions {
+		ss.Set(*region.RegionName)
+	}
+
+	// よく利用するリージョンを選択肢にする
+	aws_region := prompt.ChooseValueFromPromptItems("Select aws region", []string{
+		"ap-northeast-1",
+		"ap-northeast-3",
+		"us-east-1",
+		"other",
+	})
+	// aws ec2 describe-regionsで返されたリージョンを選択肢にする
+	if aws_region == "other" {
+		aws_region = prompt.ChooseValueFromPromptItems("Select aws region", ss.List)
+	}
+
+	// IAMロールの認証情報で取得
 	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(aws_region), config.WithSharedConfigProfile(aws_profile))
 	if err != nil {
 		log.Fatalf("unable to load SDK config, %v", err)
@@ -48,4 +76,3 @@ func Cfg() aws.Config {
 
 	return cfg
 }
-
