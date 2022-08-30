@@ -1,4 +1,6 @@
 run:
-	go run main.go
+	go run *.go
 build:
 	go build -o awsh main.go
+mod:
+	go mod tidy
