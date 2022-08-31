@@ -43,6 +43,9 @@ func Main(cfg aws.Config, action string) {
 		objects, select_bucket := s3.ListObjects(cfg, buckets)
 		s3.DownloadObject(cfg, select_bucket, objects)
 
+	case "ecs-exec":
+		fmt.Println("hello ecs exec")
+
 	case "StopECSTask":
 		cluster := ecs.ListClusters(cfg)
 		taskDef := ecs.ListTaskDefinitions(cfg)
