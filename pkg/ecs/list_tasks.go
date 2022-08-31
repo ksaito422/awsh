@@ -1,53 +1,54 @@
 package ecs
 
 import (
+	"awsh/pkg/prompt"
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
-
-	"awsh/pkg/prompt"
 )
 
-type ECSListTaskDefinitionsAPI interface {
-	ListTaskDefinitions(ctx context.Context,
-		params *ecs.ListTaskDefinitionsInput,
-		optFns ...func(*ecs.Options)) (*ecs.ListTaskDefinitionsOutput, error)
+type ECSListTasksAPI interface {
+	ListTasks(ctx context.Context,
+		params *ecs.ListTasksInput,
+		optFns ...func(*ecs.Options)) (*ecs.ListTasksOutput, error)
 }
 
-type ECSTasksName struct {
+type ECSListTasks struct {
 	List []string
 }
 
-func (m *ECSTasksName) Set(value string) {
+func (m *ECSListTasks) Set(value string) {
 	m.List = append(m.List, value)
 }
 
-func GetAllTaskDefinitions(c context.Context, api ECSListTaskDefinitionsAPI, input *ecs.ListTaskDefinitionsInput) (*ecs.ListTaskDefinitionsOutput, error) {
-	return api.ListTaskDefinitions(c, input)
+func listTaskAPI(c context.Context, api ECSListTasksAPI, input *ecs.ListTasksInput) (*ecs.ListTasksOutput, error) {
+	return api.ListTasks(c, input)
 }
 
-// aws ecs list-task-definitions
-func ListTaskDefinitions(cfg aws.Config) string {
+// aws ecs list-tasks
+func ListTasks(cfg aws.Config, cluster, family string) string {
 	client := ecs.NewFromConfig(cfg)
-
-	input := &ecs.ListTaskDefinitionsInput{}
-
-	result, err := GetAllTaskDefinitions(context.TODO(), client, input)
-	if err != nil {
-		fmt.Println("Got an error retrieving clusters:")
-		fmt.Println(err)
-		return "error"
+	input := &ecs.ListTasksInput{
+		Cluster: &cluster,
+		Family:  &family,
 	}
 
-	ss := new(ECSTasksName)
-	for _, task := range result.TaskDefinitionArns {
+	resp, err := listTaskAPI(context.TODO(), client, input)
+	if err != nil {
+		fmt.Println("Got an error retrieving list tasks:")
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	ss := new(ECSListTasks)
+	for _, task := range resp.TaskArns {
 		ss.Set(task)
 	}
 
-	select_task_definition := prompt.ChooseValueFromPromptItems("Select ECS Task Definitions", ss.List)
+	taskArn := prompt.ChooseValueFromPromptItems("Select ECS Task", ss.List)
 
-	return select_task_definition
+	return taskArn
 }
-
