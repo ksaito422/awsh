@@ -6,7 +6,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
-	
+
 	"awsh/pkg/prompt"
 )
 
@@ -34,7 +34,7 @@ func ListClusters(cfg aws.Config) string {
 
 	input := &ecs.ListClustersInput{}
 
-	result, err := GetAllClusters(context.TODO(), client, input)
+	resp, err := GetAllClusters(context.TODO(), client, input)
 	if err != nil {
 		fmt.Println("Got an error retrieving clusters:")
 		fmt.Println(err)
@@ -42,11 +42,11 @@ func ListClusters(cfg aws.Config) string {
 	}
 
 	ss := new(ECSClustersName)
-	for _, cluster := range result.ClusterArns {
+	for _, cluster := range resp.ClusterArns {
 		ss.Set(cluster)
 	}
 
-	select_cluster := prompt.ChooseValueFromPromptItems("Select ECS Clusters", ss.List)
+	cluster := prompt.ChooseValueFromPromptItems("Select ECS Clusters", ss.List)
 
-	return select_cluster
+	return cluster
 }
