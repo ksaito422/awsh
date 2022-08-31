@@ -49,7 +49,7 @@ func Main(cfg aws.Config, action string) {
 	case "StopECSTask":
 		cluster := ecs.ListClusters(cfg)
 		taskDef := ecs.ListTaskDefinitions(cfg)
-		taskDefDetail := ecs.DescribeTask(cfg, taskDef)
+		taskDefDetail := ecs.DescribeTaskDefinition(cfg, taskDef)
 		taskArn := ecs.ListTasks(cfg, cluster, *taskDefDetail.Family)
 		ecs.StopTask(cfg, cluster, taskArn)
 	}

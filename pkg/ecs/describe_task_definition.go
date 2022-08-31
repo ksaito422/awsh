@@ -21,7 +21,7 @@ func describeTaskDefinitionAPI(c context.Context, api ECSDescribeTaskDefinitionA
 }
 
 // aws ecs describe-task-definition
-func DescribeTask(cfg aws.Config, taskDef string) *types.TaskDefinition {
+func DescribeTaskDefinition(cfg aws.Config, taskDef string) *types.TaskDefinition {
 	client := ecs.NewFromConfig(cfg)
 	input := &ecs.DescribeTaskDefinitionInput{
 		TaskDefinition: &taskDef,
