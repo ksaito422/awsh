@@ -43,6 +43,10 @@ func Main(cfg aws.Config, action string) {
 		objects, select_bucket := s3.ListObjects(cfg, buckets)
 		s3.DownloadObject(cfg, select_bucket, objects)
 
+	case "StartECS":
+		// TODO: タスク定義、クラスター、ネットワーク設定を選択して、関数に渡す
+		ecs.StartContainer(cfg)
+
 	case "ecs-exec":
 		cluster := ecs.ListClusters(cfg)
 		taskDef := ecs.ListTaskDefinitions(cfg)

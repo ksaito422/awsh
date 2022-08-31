@@ -4,6 +4,7 @@ import (
 	"awsh/pkg/prompt"
 )
 
+// TODO: GoDocに関数の説明、対象リソースや操作を追加する方法を記載する
 func Main() string {
 	// 操作対象のAWSリソース群
 	route := []string{"S3", "ECS"}
@@ -22,6 +23,7 @@ func Main() string {
 		select_action = prompt.ChooseValueFromPromptItems("Select an action", actions)
 	case "ECS":
 		actions := []string{
+			"StartECS",
 			"ecs-exec",
 			"StopECSTask",
 		}
