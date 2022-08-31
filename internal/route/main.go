@@ -21,7 +21,11 @@ func Main() string {
 
 		select_action = prompt.ChooseValueFromPromptItems("Select an action", actions)
 	case "ECS":
-		// TODO: アクションを追加する
+		actions := []string{
+			"StopECSTask",
+		}
+
+		select_action = prompt.ChooseValueFromPromptItems("Select an action", actions)
 	}
 
 	return select_action
