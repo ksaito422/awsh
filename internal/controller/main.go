@@ -43,10 +43,18 @@ func Main(cfg aws.Config, action string) {
 		objects, select_bucket := s3.ListObjects(cfg, buckets)
 		s3.DownloadObject(cfg, select_bucket, objects)
 
+	case "ecs-exec":
+		cluster := ecs.ListClusters(cfg)
+		taskDef := ecs.ListTaskDefinitions(cfg)
+		taskDefDetail := ecs.DescribeTaskDefinition(cfg, taskDef)
+		taskArn := ecs.ListTasks(cfg, cluster, *taskDefDetail.Family)
+		containerName, runtimeId := ecs.DescribeTasks(cfg, cluster, taskArn)
+		ecs.ExecuteCommand(cfg, cluster, taskArn, containerName, runtimeId)
+
 	case "StopECSTask":
 		cluster := ecs.ListClusters(cfg)
 		taskDef := ecs.ListTaskDefinitions(cfg)
-		taskDefDetail := ecs.DescribeTask(cfg, taskDef)
+		taskDefDetail := ecs.DescribeTaskDefinition(cfg, taskDef)
 		taskArn := ecs.ListTasks(cfg, cluster, *taskDefDetail.Family)
 		ecs.StopTask(cfg, cluster, taskArn)
 	}

@@ -22,6 +22,7 @@ func Main() string {
 		select_action = prompt.ChooseValueFromPromptItems("Select an action", actions)
 	case "ECS":
 		actions := []string{
+			"ecs-exec",
 			"StopECSTask",
 		}
 
