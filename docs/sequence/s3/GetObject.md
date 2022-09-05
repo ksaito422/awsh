@@ -1,4 +1,4 @@
-# ListObjects
+# GetObject
 
 ```mermaid
 sequenceDiagram
@@ -10,8 +10,8 @@ sequenceDiagram
   user ->> user: 操作対象AWS Resource選択
 
   user ->> s3: ListBuckets()
-  s3 -->> user: return buckets
+  s3 -->> user: return buckets, objects
 
-  user ->> s3: ListObjects()
-  s3 -->> user: return objects
+  user ->> s3: GetObjects()
+  s3 -->> user: return object
 ```
