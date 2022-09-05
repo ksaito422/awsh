@@ -1,4 +1,4 @@
-# ListObjects
+# ListBuckets
 
 ```mermaid
 sequenceDiagram
@@ -11,7 +11,4 @@ sequenceDiagram
 
   user ->> s3: ListBuckets()
   s3 -->> user: return buckets
-
-  user ->> s3: ListObjects()
-  s3 -->> user: return objects
 ```
