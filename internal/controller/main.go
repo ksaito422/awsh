@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"awsh/pkg/ec2"
 	"awsh/pkg/ecs"
 	"awsh/pkg/s3"
 	"fmt"
@@ -44,8 +45,13 @@ func Main(cfg aws.Config, action string) {
 		s3.DownloadObject(cfg, select_bucket, objects)
 
 	case "StartECS":
-		// TODO: タスク定義、クラスター、ネットワーク設定を選択して、関数に渡す
-		ecs.StartContainer(cfg)
+		subnetId := ec2.DescribeSubnets(cfg)
+		// ec2.DescribeSecurityGroups(cfg)
+		cluster := ecs.ListClusters(cfg)
+		taskDef := ecs.ListTaskDefinitions(cfg)
+		taskDefDetail := ecs.DescribeTaskDefinition(cfg, taskDef)
+		// TODO: 起動するタスクにアタッチするセキュリティグループを後で渡す
+		ecs.StartContainer(cfg, cluster, *taskDefDetail.TaskDefinitionArn, *subnetId)
 
 	case "ecs-exec":
 		cluster := ecs.ListClusters(cfg)
