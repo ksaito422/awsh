@@ -20,7 +20,11 @@ func myRunTask(c context.Context, api ECSRunTaskAPI, input *ecs.RunTaskInput) (*
 	return api.RunTask(c, input)
 }
 
-// aws ecs run-task
+/*
+Starts a task based on the selected arguments.
+
+For aws cli -> aws ecs run-task
+*/
 func StartContainer(cfg aws.Config, cluster, taskArn, subnetId string) {
 	client := ecs.NewFromConfig(cfg)
 	// TODO: セキュリティグループも指定する

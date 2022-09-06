@@ -21,7 +21,11 @@ func GetAllObjects(c context.Context, api S3ListObjectsAPI, input *s3.ListObject
 	return api.ListObjectsV2(c, input)
 }
 
-// aws s3 list-object
+/*
+Returns data from the selected objects.
+
+For aws cli -> aws s3 list-object
+*/
 func ListObjects(cfg aws.Config, buckets []string) (*s3.ListObjectsV2Output, string) {
 	select_bucket := prompt.ChooseValueFromPromptItems("Select S3 Buckets", buckets)
 

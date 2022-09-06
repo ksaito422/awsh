@@ -28,7 +28,11 @@ func GetAllClusters(c context.Context, api ECSListClustersAPI, input *ecs.ListCl
 	return api.ListClusters(c, input)
 }
 
-// aws ecs list-clusters
+/*
+Returns data for the selected ecs cluster.
+
+For aws cli -> aws ecs list-clusters
+*/
 func ListClusters(cfg aws.Config) string {
 	client := ecs.NewFromConfig(cfg)
 

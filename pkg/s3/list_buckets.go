@@ -27,7 +27,11 @@ func GetAllBuckets(c context.Context, api S3ListBucketsAPI, input *s3.ListBucket
 	return api.ListBuckets(c, input)
 }
 
-// aws s3 ls
+/*
+Returns data from the selected bucket.
+
+For aws cli -> aws s3 ls
+*/
 func ListBuckets(cfg aws.Config) []string {
 	client := s3.NewFromConfig(cfg)
 

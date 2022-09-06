@@ -29,7 +29,11 @@ func GetObjects(c context.Context, api S3GetObjectAPI, input *s3.GetObjectInput)
 	return api.GetObject(c, input)
 }
 
-// aws s3api get-object
+/*
+Returns data from the selected object.
+
+For aws cli -> aws s3api get-object
+*/
 func GetObject(cfg aws.Config, bucket string, objects *s3.ListObjectsV2Output) *s3.GetObjectOutput {
 	ss := new(S3ObjectsName)
 	for _, item := range objects.Contents {

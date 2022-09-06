@@ -31,7 +31,9 @@ func NewDownloadS3Client(cfg aws.Config) *DownloadS3Client {
 	}
 }
 
-// s3オブジェクトのダウンロード処理
+/*
+Download s3 object.
+*/
 func (c *DownloadS3Client) DownloadSingleObject(bucket, key, filename string) {
 	file, _ := os.Create(filename)
 	defer file.Close()
@@ -50,7 +52,11 @@ func (c *DownloadS3Client) DownloadSingleObject(bucket, key, filename string) {
 	fmt.Println("download successed")
 }
 
-// aws s3api get-object(download)
+/*
+Download selected objects.
+
+For aws cli -> aws s3api get-object(download)
+*/
 func DownloadObject(cfg aws.Config, bucket string, objects *s3.ListObjectsV2Output) {
 	ss := new(S3ObjectsName)
 	for _, item := range objects.Contents {

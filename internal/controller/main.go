@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 )
 
+// Routing of operation actions on AWS resources.
 func Main(cfg aws.Config, action string) {
 	switch action {
 	case "ListBuckets":

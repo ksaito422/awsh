@@ -27,11 +27,13 @@ func (m *regionName) Set(value string) {
 	m.List = append(m.List, value)
 }
 
-// AWSがサポートしているRegionを取得する [aws ec2 describe-regions]
+// Returns regions supported by AWS.
+// For aws cli -> aws ec2 describe-regions
 func GetAllRegions(c context.Context, api EC2DescribeRegionsAPI, input *ec2.DescribeRegionsInput) (*ec2.DescribeRegionsOutput, error) {
 	return api.DescribeRegions(c, input)
 }
 
+// Returns the credentials for the specified credentials
 func Cfg() aws.Config {
 	aws_profile := prompt.ChooseValueFromPrompt("Please enter aws profile(If empty, default settings are loaded)", "")
 
@@ -68,7 +70,7 @@ func Cfg() aws.Config {
 		aws_region = prompt.ChooseValueFromPromptItems("Select aws region", ss.List)
 	}
 
-	// IAMロールの認証情報で取得
+	// IAMロールの認証情報を取得
 	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(aws_region), config.WithSharedConfigProfile(aws_profile))
 	if err != nil {
 		log.Fatalf("unable to load SDK config, %v", err)

@@ -11,7 +11,7 @@ func main() {
 	welcome.Main()
 	cfg := config.Cfg()
 
-	// 操作対象のリソースとアクションを選択して、メインの処理は各パッケージで実行
+	// Select resources and actions to be manipulated, and controller the main process.
 	select_action := route.Main()
 	controller.Main(cfg, select_action)
 }

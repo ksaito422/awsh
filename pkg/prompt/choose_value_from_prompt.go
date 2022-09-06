@@ -6,6 +6,7 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
+// Starts a prompt for text input.
 func ChooseValueFromPrompt(l string, d string) string {
 	prompt := promptui.Prompt{
 		Label:   l,
@@ -18,4 +19,3 @@ func ChooseValueFromPrompt(l string, d string) string {
 
 	return v
 }
-
