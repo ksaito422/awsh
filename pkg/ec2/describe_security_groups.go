@@ -27,7 +27,11 @@ func describeSecurityGroups(c context.Context, api DescribeSecurityGroupsAPI, in
 	return api.DescribeSecurityGroups(c, input)
 }
 
-// aws ec2 describe-security-groups
+/*
+Returns data for the security group for which the specified authentication information is held.
+
+For aws cli -> aws ec2 describe-security-groups
+*/
 func DescribeSecurityGroups(cfg aws.Config) {
 	client := ec2.NewFromConfig(cfg)
 	input := &ec2.DescribeSecurityGroupsInput{}

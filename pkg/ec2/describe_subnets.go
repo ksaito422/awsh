@@ -1,7 +1,6 @@
 package ec2
 
 import (
-	// "awsh/pkg/prompt"
 	"awsh/pkg/prompt"
 	"context"
 	"fmt"
@@ -31,7 +30,11 @@ func describeSubnets(c context.Context, api DescribeSubnetsAPI, input *ec2.Descr
 	return api.DescribeSubnets(c, input)
 }
 
-// aws ec2 describe-subnets
+/*
+Returns data for the selected subnet.
+
+For aws cli -> aws ec2 describe-subnets
+*/
 func DescribeSubnets(cfg aws.Config) *string {
 	client := ec2.NewFromConfig(cfg)
 	input := &ec2.DescribeSubnetsInput{}
