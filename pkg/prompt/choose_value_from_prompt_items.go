@@ -6,6 +6,8 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
+// Invokes a selective prompt that expands an array of
+// arguments and returns the selected value.
 func ChooseValueFromPromptItems(l string, i []string) string {
 	prompt := promptui.Select{
 		Label: l,
@@ -18,4 +20,3 @@ func ChooseValueFromPromptItems(l string, i []string) string {
 
 	return v
 }
-
