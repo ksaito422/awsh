@@ -19,7 +19,11 @@ func stopTaskAPI(c context.Context, api ECSStopTaskAPI, input *ecs.StopTaskInput
 	return api.StopTask(c, input)
 }
 
-// aws ecs stop-task
+/*
+Stops the tasks of the selected cluster.
+
+For aws cli -> aws ecs stop-task
+*/
 func StopTask(cfg aws.Config, cluster, taskArn string) {
 	client := ecs.NewFromConfig(cfg)
 	input := &ecs.StopTaskInput{

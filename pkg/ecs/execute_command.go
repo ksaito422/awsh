@@ -23,7 +23,11 @@ func executeCommandAPI(c context.Context, api ECSExecuteCommandAPI, input *ecs.E
 	return api.ExecuteCommand(c, input)
 }
 
-// aws ecs execute-command
+/*
+Connect to the selected container with ecs-exec.
+
+For aws cli -> aws ecs execute-command
+*/
 func ExecuteCommand(cfg aws.Config, cluster, taskArn, container, runtimeId string) {
 	client := ecs.NewFromConfig(cfg)
 	sh := "/bin/sh"

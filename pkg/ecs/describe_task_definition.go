@@ -20,7 +20,11 @@ func describeTaskDefinitionAPI(c context.Context, api ECSDescribeTaskDefinitionA
 	return api.DescribeTaskDefinition(c, input)
 }
 
-// aws ecs describe-task-definition
+/*
+Returns data for the ecs task definition.
+
+For aws cli -> aws ecs describe-task-definition
+*/
 func DescribeTaskDefinition(cfg aws.Config, taskDef string) *types.TaskDefinition {
 	client := ecs.NewFromConfig(cfg)
 	input := &ecs.DescribeTaskDefinitionInput{

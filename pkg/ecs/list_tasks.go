@@ -28,7 +28,11 @@ func listTaskAPI(c context.Context, api ECSListTasksAPI, input *ecs.ListTasksInp
 	return api.ListTasks(c, input)
 }
 
-// aws ecs list-tasks
+/*
+Returns data for the selected ecs task.
+
+For aws cli -> aws ecs list-tasks
+*/
 func ListTasks(cfg aws.Config, cluster, family string) string {
 	client := ecs.NewFromConfig(cfg)
 	input := &ecs.ListTasksInput{
