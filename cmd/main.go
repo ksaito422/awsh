@@ -12,6 +12,6 @@ func main() {
 	cfg := config.Cfg()
 
 	// Select resources and actions to be manipulated, and controller the main process.
-	select_action := route.Main()
-	controller.Main(cfg, select_action)
+	action := route.Main()
+	controller.Main(cfg, action)
 }
