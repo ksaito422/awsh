@@ -1,17 +1,15 @@
 package main
 
 import (
-	"awsh/internal/controller"
-	"awsh/internal/route"
-	"awsh/internal/welcome"
+	"awsh/internal/endpoints"
 	"awsh/pkg/config"
 )
 
 func main() {
-	welcome.Main()
+	endpoints.Welcome()
 	cfg := config.Cfg()
 
 	// Select resources and actions to be manipulated, and controller the main process.
-	action := route.Main()
-	controller.Main(cfg, action)
+	action := endpoints.OpeResource()
+	endpoints.Controller(cfg, action)
 }
