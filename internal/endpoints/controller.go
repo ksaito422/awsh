@@ -1,4 +1,4 @@
-package controller
+package endpoints
 
 import (
 	"awsh/pkg/ec2"
@@ -11,7 +11,7 @@ import (
 )
 
 // Routing of operation actions on AWS resources.
-func Main(cfg aws.Config, action string) {
+func Controller(cfg aws.Config, action string) {
 	switch action {
 	case "ListBuckets":
 		buckets := s3.ListBuckets(cfg)
