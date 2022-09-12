@@ -1,9 +1,9 @@
 package endpoints
 
 import (
-	"awsh/pkg/ec2"
-	"awsh/pkg/ecs"
-	"awsh/pkg/s3"
+	"awsh/pkg/api/ec2"
+	"awsh/pkg/api/ecs"
+	"awsh/pkg/api/s3"
 	"fmt"
 	"os"
 
