@@ -1,9 +1,10 @@
 package endpoints
 
 import (
-	"awsh/pkg/ec2"
-	"awsh/pkg/ecs"
-	"awsh/pkg/s3"
+	"awsh/pkg/api/ec2"
+	"awsh/pkg/api/ecs"
+	s3api "awsh/pkg/api/s3"
+	s3service "awsh/pkg/service/s3"
 	"fmt"
 	"os"
 
@@ -14,10 +15,8 @@ import (
 func Controller(cfg aws.Config, action string) {
 	switch action {
 	case "ListBuckets":
-		buckets := s3.ListBuckets(cfg)
-		for _, v := range buckets {
-			fmt.Println(v)
-		}
+		listBucketsOutput := s3api.ListBuckets(cfg)
+		s3service.OutputListBuckets(listBucketsOutput)
 
 	case "ListObjects":
 		buckets := s3.ListBuckets(cfg)

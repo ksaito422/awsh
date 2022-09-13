@@ -2,7 +2,7 @@ package main
 
 import (
 	"awsh/internal/endpoints"
-	"awsh/pkg/config"
+	"awsh/pkg/api/config"
 )
 
 func main() {
