@@ -19,12 +19,10 @@ func Controller(cfg aws.Config, action string) {
 		s3service.OutputListBuckets(listBucketsOutput)
 
 	case "ListObjects":
-		buckets := s3.ListBuckets(cfg)
-		objects, select_bucket := s3.ListObjects(cfg, buckets)
-		fmt.Println("Objects in " + select_bucket + ":")
-		for _, item := range objects.Contents {
-			fmt.Println("Name:", *item.Key, " | ", "Last modified:", *item.LastModified, " | ", "Size:", item.Size, " | ", "Storage:", item.StorageClass)
-		}
+		listBuckets := s3api.ListBuckets(cfg)
+		listBucketsName := s3service.CreateBucketsNameList(listBuckets)
+		listObjects, bucket := s3api.ListObjects(cfg, listBucketsName)
+		s3service.OutputListObjects(listObjects, bucket)
 
 	case "GetObject":
 		buckets := s3.ListBuckets(cfg)
