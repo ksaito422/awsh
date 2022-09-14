@@ -8,6 +8,7 @@ import (
 
 // Output the bucket and object list information passed as arguments.
 func OutputListObjects(v *s3.ListObjectsV2Output, bucket string) {
+	// TODO: 引数のnullチェック入れる
 	fmt.Println("Objects in " + bucket + ":")
 	for _, item := range v.Contents {
 		fmt.Println("Name:", *item.Key, " | ", "Last modified:", *item.LastModified, " | ", "Size:", item.Size, " | ", "Storage:", item.StorageClass)

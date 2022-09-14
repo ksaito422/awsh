@@ -14,6 +14,7 @@ func (l *s3BucketsName) Set(v string) {
 
 // Receives a value of type ListBucketsOutput in the argument and returns a list of bucket names in []string.
 func CreateBucketsNameList(input *s3.ListBucketsOutput) []string {
+	// TODO: 引数のnullチェック入れる
 	ls := new(s3BucketsName)
 	for _, bucket := range input.Buckets {
 		ls.Set(*bucket.Name)
