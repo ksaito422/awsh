@@ -7,9 +7,9 @@ import (
 )
 
 // Outputs information about the bucket passed as argument.
-func OutputListBuckets(value *s3.ListBucketsOutput) {
+func OutputListBuckets(v *s3.ListBucketsOutput) {
 	// TODO: 引数のnullチェック入れる
-	for _, bucket := range value.Buckets {
+	for _, bucket := range v.Buckets {
 		fmt.Println(*bucket.Name)
 	}
 }
