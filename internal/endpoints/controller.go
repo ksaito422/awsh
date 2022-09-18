@@ -5,8 +5,6 @@ import (
 	"awsh/pkg/api/ecs"
 	s3api "awsh/pkg/api/s3"
 	s3service "awsh/pkg/service/s3"
-	"fmt"
-	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 )
@@ -14,6 +12,7 @@ import (
 // Routing of operation actions on AWS resources.
 func Controller(cfg aws.Config, action string) {
 	switch action {
+	// S3
 	case "ListBuckets":
 		listBucketsOutput := s3api.ListBuckets(cfg)
 		s3service.OutputListBuckets(listBucketsOutput)
@@ -24,24 +23,13 @@ func Controller(cfg aws.Config, action string) {
 		listObjects, bucket := s3api.ListObjects(cfg, listBucketsName)
 		s3service.OutputListObjects(listObjects, bucket)
 
-	case "GetObject":
-		buckets := s3.ListBuckets(cfg)
-		objects, select_bucket := s3.ListObjects(cfg, buckets)
-		select_object := s3.GetObject(cfg, select_bucket, objects)
-		rc := select_object.Body
-		defer rc.Close()
-		buf := make([]byte, 10000)
-		_, err := rc.Read(buf)
-		if err != nil {
-			os.Exit(1)
-		}
-		fmt.Printf("%s", buf)
-
 	case "DownloadObject":
-		buckets := s3.ListBuckets(cfg)
-		objects, select_bucket := s3.ListObjects(cfg, buckets)
-		s3.DownloadObject(cfg, select_bucket, objects)
+		listBuckets := s3api.ListBuckets(cfg)
+		listBucketsName := s3service.CreateBucketsNameList(listBuckets)
+		listObjects, bucket := s3api.ListObjects(cfg, listBucketsName)
+		s3api.DownloadObject(cfg, bucket, listObjects)
 
+	// ECS
 	case "StartECS":
 		subnetId := ec2.DescribeSubnets(cfg)
 		// ec2.DescribeSecurityGroups(cfg)
