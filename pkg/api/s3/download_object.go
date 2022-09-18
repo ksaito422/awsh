@@ -31,11 +31,9 @@ func NewDownloadS3Client(cfg aws.Config) *DownloadS3Client {
 	}
 }
 
-/*
-Download s3 object.
-*/
-func (c *DownloadS3Client) DownloadSingleObject(bucket, key, filename string) {
-	file, _ := os.Create(filename)
+// Download s3 object.
+func (c *DownloadS3Client) DownloadSingleObject(bucket, key string) {
+	file, _ := os.Create(key)
 	defer file.Close()
 
 	_, err := c.downloader.Download(context.Background(), file, &s3.GetObjectInput{
@@ -49,23 +47,18 @@ func (c *DownloadS3Client) DownloadSingleObject(bucket, key, filename string) {
 		os.Exit(1)
 	}
 
-	fmt.Println("download successed")
+	fmt.Println("Download successed!")
 }
 
-/*
-Download selected objects.
-
-For aws cli -> aws s3api get-object(download)
-*/
+// Download selected objects.
 func DownloadObject(cfg aws.Config, bucket string, objects *s3.ListObjectsV2Output) {
 	ss := new(S3ObjectsName)
 	for _, item := range objects.Contents {
 		ss.Set(*item.Key)
 	}
 
-	select_object := prompt.ChooseValueFromPromptItems("Select S3 Objects", ss.List)
-	fmt.Println(select_object)
+	object := prompt.ChooseValueFromPromptItems("Select S3 Objects", ss.List)
 
 	client := NewDownloadS3Client(cfg)
-	client.DownloadSingleObject(bucket, select_object, select_object)
+	client.DownloadSingleObject(bucket, object)
 }
