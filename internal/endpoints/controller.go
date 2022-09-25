@@ -2,8 +2,9 @@ package endpoints
 
 import (
 	"awsh/pkg/api/ec2"
-	"awsh/pkg/api/ecs"
+	ecsapi "awsh/pkg/api/ecs"
 	s3api "awsh/pkg/api/s3"
+	ecsservice "awsh/pkg/service/ecs"
 	s3service "awsh/pkg/service/s3"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -32,26 +33,34 @@ func Controller(cfg aws.Config, action string) {
 	// ECS
 	case "StartECS":
 		subnetId := ec2.DescribeSubnets(cfg)
-		// ec2.DescribeSecurityGroups(cfg)
-		cluster := ecs.ListClusters(cfg)
-		taskDef := ecs.ListTaskDefinitions(cfg)
-		taskDefDetail := ecs.DescribeTaskDefinition(cfg, taskDef)
+		ec2.DescribeSecurityGroups(cfg)
+		listClusters := ecsapi.ListClusters(cfg)
+		clusterArn := ecsservice.SelectClusterArn(listClusters)
+		listTaskDefs := ecsapi.ListTaskDefinitions(cfg)
+		taskDef := ecsservice.SelectTaskDefinition(listTaskDefs)
+		taskDefDetail := ecsapi.DescribeTaskDefinition(cfg, taskDef)
 		// TODO: 起動するタスクにアタッチするセキュリティグループを後で渡す
-		ecs.StartContainer(cfg, cluster, *taskDefDetail.TaskDefinitionArn, *subnetId)
+		ecsapi.StartContainer(cfg, clusterArn, *taskDefDetail.TaskDefinitionArn, *subnetId)
 
 	case "ecs-exec":
-		cluster := ecs.ListClusters(cfg)
-		taskDef := ecs.ListTaskDefinitions(cfg)
-		taskDefDetail := ecs.DescribeTaskDefinition(cfg, taskDef)
-		taskArn := ecs.ListTasks(cfg, cluster, *taskDefDetail.Family)
-		containerName, runtimeId := ecs.DescribeTasks(cfg, cluster, taskArn)
-		ecs.ExecuteCommand(cfg, cluster, taskArn, containerName, runtimeId)
+		listClusters := ecsapi.ListClusters(cfg)
+		clusterArn := ecsservice.SelectClusterArn(listClusters)
+		listTaskDefs := ecsapi.ListTaskDefinitions(cfg)
+		taskDef := ecsservice.SelectTaskDefinition(listTaskDefs)
+		taskDefDetail := ecsapi.DescribeTaskDefinition(cfg, taskDef)
+		// TODO: リファクタ中
+		taskArn := ecsapi.ListTasks(cfg, clusterArn, *taskDefDetail.Family)
+		containerName, runtimeId := ecsapi.DescribeTasks(cfg, clusterArn, taskArn)
+		ecsapi.ExecuteCommand(cfg, clusterArn, taskArn, containerName, runtimeId)
 
 	case "StopECSTask":
-		cluster := ecs.ListClusters(cfg)
-		taskDef := ecs.ListTaskDefinitions(cfg)
-		taskDefDetail := ecs.DescribeTaskDefinition(cfg, taskDef)
-		taskArn := ecs.ListTasks(cfg, cluster, *taskDefDetail.Family)
-		ecs.StopTask(cfg, cluster, taskArn)
+		listClusters := ecsapi.ListClusters(cfg)
+		clusterArn := ecsservice.SelectClusterArn(listClusters)
+		listTaskDefs := ecsapi.ListTaskDefinitions(cfg)
+		taskDef := ecsservice.SelectTaskDefinition(listTaskDefs)
+		taskDefDetail := ecsapi.DescribeTaskDefinition(cfg, taskDef)
+		// TODO: リファクタ中
+		taskArn := ecsapi.ListTasks(cfg, clusterArn, *taskDefDetail.Family)
+		ecsapi.StopTask(cfg, clusterArn, taskArn)
 	}
 }
