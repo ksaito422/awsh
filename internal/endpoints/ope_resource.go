@@ -17,7 +17,6 @@ func OpeResource() string {
 		opeActions := []string{
 			"ListBuckets",
 			"ListObjects",
-			"GetObject",
 			"DownloadObject",
 		}
 
