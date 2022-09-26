@@ -7,8 +7,6 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-
-	"awsh/pkg/prompt"
 )
 
 type s3ListObjectsAPI interface {
@@ -23,9 +21,7 @@ func getAllObjects(c context.Context, api s3ListObjectsAPI, input *s3.ListObject
 
 // Returns data from the selected objects.
 // For aws cli -> aws s3 list-object
-func ListObjects(cfg aws.Config, listBuckets []string) (*s3.ListObjectsV2Output, string) {
-	bucket := prompt.ChooseValueFromPromptItems("Select S3 Buckets", listBuckets)
-
+func ListObjects(cfg aws.Config, bucket string) (*s3.ListObjectsV2Output, string) {
 	client := s3.NewFromConfig(cfg)
 	// 上で選択したバケット内のオブジェクトの取得
 	bucket_input := &s3.ListObjectsV2Input{
