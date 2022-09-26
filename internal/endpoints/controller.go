@@ -15,19 +15,19 @@ func Controller(cfg aws.Config, action string) {
 	switch action {
 	// S3
 	case "ListBuckets":
-		listBucketsOutput := s3api.ListBuckets(cfg)
-		s3service.OutputListBuckets(listBucketsOutput)
+		listBuckets := s3api.ListBuckets(cfg)
+		s3service.OutputListBuckets(listBuckets)
 
 	case "ListObjects":
 		listBuckets := s3api.ListBuckets(cfg)
-		listBucketsName := s3service.CreateBucketsNameList(listBuckets)
-		listObjects, bucket := s3api.ListObjects(cfg, listBucketsName)
+		BucketName := s3service.SelectBucketName(listBuckets)
+		listObjects, bucket := s3api.ListObjects(cfg, BucketName)
 		s3service.OutputListObjects(listObjects, bucket)
 
 	case "DownloadObject":
 		listBuckets := s3api.ListBuckets(cfg)
-		listBucketsName := s3service.CreateBucketsNameList(listBuckets)
-		listObjects, bucket := s3api.ListObjects(cfg, listBucketsName)
+		BucketName := s3service.SelectBucketName(listBuckets)
+		listObjects, bucket := s3api.ListObjects(cfg, BucketName)
 		s3api.DownloadObject(cfg, bucket, listObjects)
 
 	// ECS
