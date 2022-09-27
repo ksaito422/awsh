@@ -1,7 +1,6 @@
 package ecs
 
 import (
-	"awsh/pkg/prompt"
 	"context"
 	"fmt"
 	"os"
@@ -30,7 +29,7 @@ func listTaskAPI(c context.Context, api ECSListTasksAPI, input *ecs.ListTasksInp
 
 // Returns data for the selected ecs task.
 // For aws cli -> aws ecs list-tasks
-func ListTasks(cfg aws.Config, cluster, family string) string {
+func ListTasks(cfg aws.Config, cluster, family string) *ecs.ListTasksOutput {
 	client := ecs.NewFromConfig(cfg)
 	input := &ecs.ListTasksInput{
 		Cluster: &cluster,
@@ -44,12 +43,5 @@ func ListTasks(cfg aws.Config, cluster, family string) string {
 		os.Exit(1)
 	}
 
-	ss := new(ECSListTasks)
-	for _, task := range resp.TaskArns {
-		ss.Set(task)
-	}
-
-	taskArn := prompt.ChooseValueFromPromptItems("Select ECS Task", ss.List)
-
-	return taskArn
+	return resp
 }

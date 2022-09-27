@@ -48,8 +48,9 @@ func Controller(cfg aws.Config, action string) {
 		listTaskDefs := ecsapi.ListTaskDefinitions(cfg)
 		taskDef := ecsservice.SelectTaskDefinition(listTaskDefs)
 		taskDefDetail := ecsapi.DescribeTaskDefinition(cfg, taskDef)
+		listTasks := ecsapi.ListTasks(cfg, clusterArn, *taskDefDetail.Family)
+		taskArn := ecsservice.SelectTaskArn(listTasks)
 		// TODO: リファクタ中
-		taskArn := ecsapi.ListTasks(cfg, clusterArn, *taskDefDetail.Family)
 		containerName, runtimeId := ecsapi.DescribeTasks(cfg, clusterArn, taskArn)
 		ecsapi.ExecuteCommand(cfg, clusterArn, taskArn, containerName, runtimeId)
 
@@ -59,8 +60,8 @@ func Controller(cfg aws.Config, action string) {
 		listTaskDefs := ecsapi.ListTaskDefinitions(cfg)
 		taskDef := ecsservice.SelectTaskDefinition(listTaskDefs)
 		taskDefDetail := ecsapi.DescribeTaskDefinition(cfg, taskDef)
-		// TODO: リファクタ中
-		taskArn := ecsapi.ListTasks(cfg, clusterArn, *taskDefDetail.Family)
+		listTasks := ecsapi.ListTasks(cfg, clusterArn, *taskDefDetail.Family)
+		taskArn := ecsservice.SelectTaskArn(listTasks)
 		ecsapi.StopTask(cfg, clusterArn, taskArn)
 	}
 }
