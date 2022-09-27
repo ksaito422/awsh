@@ -32,7 +32,9 @@ func Controller(cfg aws.Config, action string) {
 
 	// ECS
 	case "StartECS":
+		// TODO: リファクタする
 		subnetId := ec2.DescribeSubnets(cfg)
+		// TODO: リファクタする
 		ec2.DescribeSecurityGroups(cfg)
 		listClusters := ecsapi.ListClusters(cfg)
 		clusterArn := ecsservice.SelectClusterArn(listClusters)
