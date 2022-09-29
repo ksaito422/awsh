@@ -20,12 +20,9 @@ func describeTasksAPI(c context.Context, api ECSDescribeTasksAPI, input *ecs.Des
 	return api.DescribeTasks(c, input)
 }
 
-/*
-Returns detailed data for the selected ecs task.
-
-For aws cli -> aws ecs describe-tasks
-*/
-func DescribeTasks(cfg aws.Config, cluster, taskArn string) (string, string) {
+// Returns detailed data for the selected ecs task.
+// For aws cli -> aws ecs describe-tasks
+func DescribeTasks(cfg aws.Config, cluster, taskArn string) *ecs.DescribeTasksOutput {
 	client := ecs.NewFromConfig(cfg)
 	taskArr := []string{taskArn}
 	input := &ecs.DescribeTasksInput{
@@ -40,6 +37,5 @@ func DescribeTasks(cfg aws.Config, cluster, taskArn string) (string, string) {
 		os.Exit(1)
 	}
 
-	// TODO: 戻り値の設計をして、returnを変えたい
-	return *resp.Tasks[0].Containers[0].Name, *resp.Tasks[0].Containers[0].RuntimeId
+	return resp
 }

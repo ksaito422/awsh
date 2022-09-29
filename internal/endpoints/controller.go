@@ -32,7 +32,9 @@ func Controller(cfg aws.Config, action string) {
 
 	// ECS
 	case "StartECS":
+		// TODO: リファクタする
 		subnetId := ec2.DescribeSubnets(cfg)
+		// TODO: リファクタする
 		ec2.DescribeSecurityGroups(cfg)
 		listClusters := ecsapi.ListClusters(cfg)
 		clusterArn := ecsservice.SelectClusterArn(listClusters)
@@ -50,8 +52,9 @@ func Controller(cfg aws.Config, action string) {
 		taskDefDetail := ecsapi.DescribeTaskDefinition(cfg, taskDef)
 		listTasks := ecsapi.ListTasks(cfg, clusterArn, *taskDefDetail.Family)
 		taskArn := ecsservice.SelectTaskArn(listTasks)
-		// TODO: リファクタ中
-		containerName, runtimeId := ecsapi.DescribeTasks(cfg, clusterArn, taskArn)
+		taskDetail := ecsapi.DescribeTasks(cfg, clusterArn, taskArn)
+		containerName := ecsservice.SelectTaskContainer(taskDetail)
+		runtimeId := ecsservice.SelectRuntimeId(taskDetail)
 		ecsapi.ExecuteCommand(cfg, clusterArn, taskArn, containerName, runtimeId)
 
 	case "StopECSTask":
