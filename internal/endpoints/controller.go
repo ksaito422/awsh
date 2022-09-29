@@ -52,8 +52,9 @@ func Controller(cfg aws.Config, action string) {
 		taskDefDetail := ecsapi.DescribeTaskDefinition(cfg, taskDef)
 		listTasks := ecsapi.ListTasks(cfg, clusterArn, *taskDefDetail.Family)
 		taskArn := ecsservice.SelectTaskArn(listTasks)
-		// TODO: リファクタ中
-		containerName, runtimeId := ecsapi.DescribeTasks(cfg, clusterArn, taskArn)
+		taskDetail := ecsapi.DescribeTasks(cfg, clusterArn, taskArn)
+		containerName := ecsservice.SelectTaskContainer(taskDetail)
+		runtimeId := ecsservice.SelectRuntimeId(taskDetail)
 		ecsapi.ExecuteCommand(cfg, clusterArn, taskArn, containerName, runtimeId)
 
 	case "StopECSTask":
