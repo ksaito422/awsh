@@ -10,6 +10,6 @@ func main() {
 	cfg := config.Cfg()
 
 	// Select resources and actions to be manipulated, and controller the main process.
-	action := endpoints.OpeResource()
+	action := endpoints.Operation()
 	endpoints.Controller(cfg, action)
 }
