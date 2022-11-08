@@ -2,8 +2,6 @@ package s3
 
 import (
 	"context"
-	"fmt"
-	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
@@ -21,19 +19,17 @@ func getAllObjects(c context.Context, api s3ListObjectsAPI, input *s3.ListObject
 
 // Returns data from the selected objects.
 // For aws cli -> aws s3 list-object
-func ListObjects(cfg aws.Config, bucket string) (*s3.ListObjectsV2Output, string) {
+func ListObjects(cfg aws.Config, bucket string) (*s3.ListObjectsV2Output, error) {
 	client := s3.NewFromConfig(cfg)
-	// 上で選択したバケット内のオブジェクトの取得
+	// 引数で指定したバケット内のオブジェクトの取得
 	bucket_input := &s3.ListObjectsV2Input{
 		Bucket: &bucket,
 	}
 
 	resp, err := getAllObjects(context.TODO(), client, bucket_input)
 	if err != nil {
-		fmt.Println("Got error retrieving list of objects:")
-		fmt.Println(err)
-		os.Exit(1)
+		return nil, err
 	}
 
-	return resp, bucket
+	return resp, nil
 }

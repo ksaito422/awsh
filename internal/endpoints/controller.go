@@ -18,11 +18,9 @@ func Controller(cfg aws.Config, action string) error {
 		err := s3.ListBuckets(cfg)
 		return err
 
-		// case "ListObjects":
-		// 	listBuckets := s3api.ListBuckets(cfg)
-		// 	BucketName := s3service.SelectBucketName(listBuckets)
-		// 	listObjects, bucket := s3api.ListObjects(cfg, BucketName)
-		// 	s3service.OutputListObjects(listObjects, bucket)
+	case "ListObjects":
+		err := s3.ListObjects(cfg)
+		return err
 		//
 		// case "DownloadObject":
 		// 	listBuckets := s3api.ListBuckets(cfg)
