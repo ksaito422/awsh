@@ -31,6 +31,7 @@ func DescribeTaskDefinition(cfg aws.Config, taskDef string) (*types.TaskDefiniti
 	if err != nil {
 		log := logging.Log()
 		log.Error().Err(err).Msg("Got an error retrieving list tasks:")
+
 		return nil, err
 	}
 

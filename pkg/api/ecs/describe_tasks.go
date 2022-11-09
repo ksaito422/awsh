@@ -33,6 +33,7 @@ func DescribeTasks(cfg aws.Config, cluster, taskArn string) (*ecs.DescribeTasksO
 	if err != nil {
 		log := logging.Log()
 		log.Error().Err(err).Msg("Got an error retrieving describe tasks:")
+
 		return nil, err
 	}
 

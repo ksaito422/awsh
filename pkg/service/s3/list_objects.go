@@ -5,7 +5,6 @@ import (
 
 	"awsh/internal/logging"
 	s3api "awsh/pkg/api/s3"
-	"awsh/pkg/service"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 )
@@ -14,9 +13,6 @@ import (
 func ListObjects(cfg aws.Config) error {
 	listBuckets, err := s3api.ListBuckets(cfg)
 	if err != nil {
-		log := logging.Log()
-		log.Error().Err(err).Msg("Got an error retrieving buckets:")
-
 		return err
 	}
 
@@ -28,12 +24,9 @@ func ListObjects(cfg aws.Config) error {
 		return nil
 	}
 
-	bucketName := service.SelectBucketName(listBuckets)
+	bucketName := SelectBucketName(listBuckets)
 	listObjects, err := s3api.ListObjects(cfg, bucketName)
 	if err != nil {
-		log := logging.Log()
-		log.Error().Err(err).Msg("Got error retrieving list of objects:")
-
 		return err
 	}
 

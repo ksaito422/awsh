@@ -29,6 +29,7 @@ func ListClusters(cfg aws.Config) (*ecs.ListClustersOutput, error) {
 	if err != nil {
 		log := logging.Log()
 		log.Error().Err(err).Msg("Got an error retrieving clusters:")
+
 		return nil, err
 	}
 

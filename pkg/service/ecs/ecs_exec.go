@@ -59,7 +59,9 @@ func EcsExec(cfg aws.Config) error {
 
 	containerName := SelectTaskContainer(taskDetail)
 	runtimeId := SelectRuntimeId(taskDetail)
-	ecsapi.ExecuteCommand(cfg, clusterArn, taskArn, containerName, runtimeId)
+	if err := ecsapi.ExecuteCommand(cfg, clusterArn, taskArn, containerName, runtimeId); err != nil {
+		return err
+	}
 
 	return nil
 }

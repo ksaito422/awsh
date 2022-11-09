@@ -39,6 +39,7 @@ func ListTasks(cfg aws.Config, cluster, family string) (*ecs.ListTasksOutput, er
 	if err != nil {
 		log := logging.Log()
 		log.Error().Err(err).Msg("Got an error retrieving list tasks:")
+
 		return nil, err
 	}
 

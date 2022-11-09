@@ -12,9 +12,6 @@ import (
 func ListBuckets(cfg aws.Config) error {
 	listBuckets, err := s3api.ListBuckets(cfg)
 	if err != nil {
-		log := logging.Log()
-		log.Error().Err(err).Msg("Got an error retrieving buckets:")
-
 		return err
 	}
 
