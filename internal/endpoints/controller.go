@@ -3,7 +3,6 @@ package endpoints
 import (
 	// "awsh/pkg/api/ec2"
 	// ecsapi "awsh/pkg/api/ecs"
-	// s3api "awsh/pkg/api/s3"
 	// ecsservice "awsh/pkg/service/ecs"
 	"awsh/pkg/service/s3"
 
@@ -21,14 +20,12 @@ func Controller(cfg aws.Config, action string) error {
 	case "ListObjects":
 		err := s3.ListObjects(cfg)
 		return err
-		//
-		// case "DownloadObject":
-		// 	listBuckets := s3api.ListBuckets(cfg)
-		// 	BucketName := s3service.SelectBucketName(listBuckets)
-		// 	listObjects, bucket := s3api.ListObjects(cfg, BucketName)
-		// 	s3api.DownloadObject(cfg, bucket, listObjects)
-		//
-		// // ECS
+
+	case "DownloadObject":
+		err := s3.DownloadObject(cfg)
+		return err
+
+		// ECS
 		// case "StartECS":
 		// 	// TODO: リファクタする
 		// 	subnetId := ec2.DescribeSubnets(cfg)
