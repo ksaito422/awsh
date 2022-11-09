@@ -2,9 +2,8 @@ package ecs
 
 import (
 	"context"
-	"fmt"
-	"os"
 
+	"awsh/internal/logging"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
 )
@@ -21,17 +20,17 @@ func GetAllClusters(c context.Context, api ECSListClustersAPI, input *ecs.ListCl
 
 // Returns data for the selected ecs cluster.
 // For aws cli -> aws ecs list-clusters
-func ListClusters(cfg aws.Config) *ecs.ListClustersOutput {
+func ListClusters(cfg aws.Config) (*ecs.ListClustersOutput, error) {
 	client := ecs.NewFromConfig(cfg)
 
 	input := &ecs.ListClustersInput{}
 
 	resp, err := GetAllClusters(context.TODO(), client, input)
 	if err != nil {
-		fmt.Println("Got an error retrieving clusters:")
-		fmt.Println(err)
-		os.Exit(1)
+		log := logging.Log()
+		log.Error().Err(err).Msg("Got an error retrieving clusters:")
+		return nil, err
 	}
 
-	return resp
+	return resp, nil
 }

@@ -2,9 +2,8 @@ package ecs
 
 import (
 	"context"
-	"fmt"
-	"os"
 
+	"awsh/internal/logging"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
 )
@@ -21,17 +20,17 @@ func GetAllTaskDefinitions(c context.Context, api ECSListTaskDefinitionsAPI, inp
 
 // Returns data for the selected ecs task definition.
 // For aws cli -> aws ecs list-task-definitions
-func ListTaskDefinitions(cfg aws.Config) *ecs.ListTaskDefinitionsOutput {
+func ListTaskDefinitions(cfg aws.Config) (*ecs.ListTaskDefinitionsOutput, error) {
 	client := ecs.NewFromConfig(cfg)
 
 	input := &ecs.ListTaskDefinitionsInput{}
 
 	resp, err := GetAllTaskDefinitions(context.TODO(), client, input)
 	if err != nil {
-		fmt.Println("Got an error retrieving clusters:")
-		fmt.Println(err)
-		os.Exit(1)
+		log := logging.Log()
+		log.Error().Err(err).Msg("Got an error retrieving clusters:")
+		return nil, err
 	}
 
-	return resp
+	return resp, nil
 }
