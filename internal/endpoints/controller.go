@@ -41,15 +41,10 @@ func Controller(cfg aws.Config, action string) error {
 		err := ecs.EcsExec(cfg)
 		return err
 
-		// case "StopECSTask":
-		// 	listClusters := ecsapi.ListClusters(cfg)
-		// 	clusterArn := ecsservice.SelectClusterArn(listClusters)
-		// 	listTaskDefs := ecsapi.ListTaskDefinitions(cfg)
-		// 	taskDef := ecsservice.SelectTaskDefinition(listTaskDefs)
-		// 	taskDefDetail := ecsapi.DescribeTaskDefinition(cfg, taskDef)
-		// 	listTasks := ecsapi.ListTasks(cfg, clusterArn, *taskDefDetail.Family)
-		// 	taskArn := ecsservice.SelectTaskArn(listTasks)
-		// 	ecsapi.StopTask(cfg, clusterArn, taskArn)
+	case "StopECSTask":
+		err := ecs.StopEcsTask(cfg)
+		return err
+
 	default:
 		return nil
 	}
