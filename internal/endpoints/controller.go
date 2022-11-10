@@ -24,18 +24,9 @@ func Controller(cfg aws.Config, action string) error {
 		return err
 
 	// ECS
-	// case "StartECS":
-	// 	// TODO: リファクタする
-	// 	subnetId := ec2.DescribeSubnets(cfg)
-	// 	// TODO: リファクタする
-	// 	ec2.DescribeSecurityGroups(cfg)
-	// 	listClusters := ecsapi.ListClusters(cfg)
-	// 	clusterArn := ecsservice.SelectClusterArn(listClusters)
-	// 	listTaskDefs := ecsapi.ListTaskDefinitions(cfg)
-	// 	taskDef := ecsservice.SelectTaskDefinition(listTaskDefs)
-	// 	taskDefDetail := ecsapi.DescribeTaskDefinition(cfg, taskDef)
-	// 	// TODO: 起動するタスクにアタッチするセキュリティグループを後で渡す
-	// 	ecsapi.StartContainer(cfg, clusterArn, *taskDefDetail.TaskDefinitionArn, *subnetId)
+	case "StartECS":
+		err := ecs.StartEcs(cfg)
+		return err
 
 	case "ecs-exec":
 		err := ecs.EcsExec(cfg)

@@ -3,8 +3,8 @@ package ec2
 import (
 	"context"
 	"fmt"
-	"os"
 
+	"awsh/internal/logging"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 )
@@ -32,15 +32,16 @@ Returns data for the security group for which the specified authentication infor
 
 For aws cli -> aws ec2 describe-security-groups
 */
-func DescribeSecurityGroups(cfg aws.Config) {
+func DescribeSecurityGroups(cfg aws.Config) error {
 	client := ec2.NewFromConfig(cfg)
 	input := &ec2.DescribeSecurityGroupsInput{}
 
 	resp, err := describeSecurityGroups(context.TODO(), client, input)
 	if err != nil {
-		fmt.Println("Got an error retrieving describe security groups:")
-		fmt.Println(err)
-		os.Exit(1)
+		log := logging.Log()
+		log.Error().Err(err).Msg("Got an error retrieving describe security groups:")
+
+		return err
 	}
 
 	ss := new(SecurityGroups)
@@ -50,4 +51,6 @@ func DescribeSecurityGroups(cfg aws.Config) {
 
 		ss.Set(*sg.GroupId)
 	}
+
+	return nil
 }
