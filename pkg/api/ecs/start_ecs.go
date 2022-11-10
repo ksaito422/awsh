@@ -3,8 +3,8 @@ package ecs
 import (
 	"context"
 	"fmt"
-	"os"
 
+	"awsh/internal/logging"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
 	"github.com/aws/aws-sdk-go-v2/service/ecs/types"
@@ -25,7 +25,7 @@ Starts a task based on the selected arguments.
 
 For aws cli -> aws ecs run-task
 */
-func StartContainer(cfg aws.Config, cluster, taskArn, subnetId string) {
+func StartContainer(cfg aws.Config, cluster, taskArn, subnetId string) error {
 	client := ecs.NewFromConfig(cfg)
 	// TODO: セキュリティグループも指定する
 	input := &ecs.RunTaskInput{
@@ -43,10 +43,13 @@ func StartContainer(cfg aws.Config, cluster, taskArn, subnetId string) {
 
 	_, err := myRunTask(context.TODO(), client, input)
 	if err != nil {
-		fmt.Println("Got an error retrieving buckets:")
-		fmt.Println(err)
-		os.Exit(1)
+		log := logging.Log()
+		log.Error().Err(err).Msg("Got an error retrieving buckets:")
+
+		return nil
 	}
 
 	fmt.Println("Done. Bye!")
+
+	return nil
 }

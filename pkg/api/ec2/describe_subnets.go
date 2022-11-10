@@ -1,10 +1,9 @@
 package ec2
 
 import (
+	"awsh/internal/logging"
 	"awsh/pkg/prompt"
 	"context"
-	"fmt"
-	"os"
 	"strconv"
 	"strings"
 
@@ -35,15 +34,16 @@ Returns data for the selected subnet.
 
 For aws cli -> aws ec2 describe-subnets
 */
-func DescribeSubnets(cfg aws.Config) *string {
+func DescribeSubnets(cfg aws.Config) (*string, error) {
 	client := ec2.NewFromConfig(cfg)
 	input := &ec2.DescribeSubnetsInput{}
 
 	resp, err := describeSubnets(context.TODO(), client, input)
 	if err != nil {
-		fmt.Println("Got an error retrieving describe subnets:")
-		fmt.Println(err)
-		os.Exit(1)
+		log := logging.Log()
+		log.Error().Err(err).Msg("Got an error retrieving describe subnets:")
+
+		return nil, err
 	}
 
 	ss := new(Subnets)
@@ -59,5 +59,5 @@ func DescribeSubnets(cfg aws.Config) *string {
 	tag := prompt.ChooseValueFromPromptItems("Select subnet tags", ss.List)
 	cnt := strings.Index(tag, ".")
 	i, _ := strconv.Atoi(tag[0:cnt])
-	return resp.Subnets[i].SubnetId
+	return resp.Subnets[i].SubnetId, nil
 }

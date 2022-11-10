@@ -11,14 +11,6 @@ import (
 	"awsh/pkg/prompt"
 )
 
-type S3ObjectsName struct {
-	List []string
-}
-
-func (m *S3ObjectsName) Set(value string) {
-	m.List = append(m.List, value)
-}
-
 type S3GetObjectAPI interface {
 	GetObject(ctx context.Context,
 		params *s3.GetObjectInput,

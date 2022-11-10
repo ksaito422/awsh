@@ -2,15 +2,23 @@ package s3
 
 import (
 	"context"
-	"fmt"
 	"os"
 
+	"awsh/internal/logging"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 
 	"awsh/pkg/prompt"
 )
+
+type S3ObjectsName struct {
+	List []string
+}
+
+func (m *S3ObjectsName) Set(value string) {
+	m.List = append(m.List, value)
+}
 
 type DownloadS3Client struct {
 	downloader *manager.Downloader
@@ -32,7 +40,7 @@ func NewDownloadS3Client(cfg aws.Config) *DownloadS3Client {
 }
 
 // Download s3 object.
-func (c *DownloadS3Client) DownloadSingleObject(bucket, key string) {
+func (c *DownloadS3Client) DownloadSingleObject(bucket, key string) error {
 	file, _ := os.Create(key)
 	defer file.Close()
 
@@ -42,16 +50,14 @@ func (c *DownloadS3Client) DownloadSingleObject(bucket, key string) {
 	})
 
 	if err != nil {
-		fmt.Println("Got error retrieving list of objects:")
-		fmt.Println(err)
-		os.Exit(1)
+		return nil
 	}
 
-	fmt.Println("Download successed!")
+	return nil
 }
 
 // Download selected objects.
-func DownloadObject(cfg aws.Config, bucket string, objects *s3.ListObjectsV2Output) {
+func DownloadObject(cfg aws.Config, bucket string, objects *s3.ListObjectsV2Output) error {
 	ss := new(S3ObjectsName)
 	for _, item := range objects.Contents {
 		ss.Set(*item.Key)
@@ -60,5 +66,12 @@ func DownloadObject(cfg aws.Config, bucket string, objects *s3.ListObjectsV2Outp
 	object := prompt.ChooseValueFromPromptItems("Select S3 Objects", ss.List)
 
 	client := NewDownloadS3Client(cfg)
-	client.DownloadSingleObject(bucket, object)
+	if err := client.DownloadSingleObject(bucket, object); err != nil {
+		log := logging.Log()
+		log.Error().Err(err).Msg("An error occurred while downloading the object")
+
+		return err
+	}
+
+	return nil
 }

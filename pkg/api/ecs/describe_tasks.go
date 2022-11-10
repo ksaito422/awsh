@@ -1,9 +1,8 @@
 package ecs
 
 import (
+	"awsh/internal/logging"
 	"context"
-	"fmt"
-	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
@@ -22,7 +21,7 @@ func describeTasksAPI(c context.Context, api ECSDescribeTasksAPI, input *ecs.Des
 
 // Returns detailed data for the selected ecs task.
 // For aws cli -> aws ecs describe-tasks
-func DescribeTasks(cfg aws.Config, cluster, taskArn string) *ecs.DescribeTasksOutput {
+func DescribeTasks(cfg aws.Config, cluster, taskArn string) (*ecs.DescribeTasksOutput, error) {
 	client := ecs.NewFromConfig(cfg)
 	taskArr := []string{taskArn}
 	input := &ecs.DescribeTasksInput{
@@ -32,10 +31,11 @@ func DescribeTasks(cfg aws.Config, cluster, taskArn string) *ecs.DescribeTasksOu
 
 	resp, err := describeTasksAPI(context.TODO(), client, input)
 	if err != nil {
-		fmt.Println("Got an error retrieving describe tasks:")
-		fmt.Println(err)
-		os.Exit(1)
+		log := logging.Log()
+		log.Error().Err(err).Msg("Got an error retrieving describe tasks:")
+
+		return nil, err
 	}
 
-	return resp
+	return resp, nil
 }

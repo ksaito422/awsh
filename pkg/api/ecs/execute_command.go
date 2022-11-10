@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"os/signal"
 
+	"awsh/internal/logging"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
@@ -28,7 +29,7 @@ Connect to the selected container with ecs-exec.
 
 For aws cli -> aws ecs execute-command
 */
-func ExecuteCommand(cfg aws.Config, cluster, taskArn, container, runtimeId string) {
+func ExecuteCommand(cfg aws.Config, cluster, taskArn, container, runtimeId string) error {
 	client := ecs.NewFromConfig(cfg)
 	sh := "/bin/sh"
 	input := &ecs.ExecuteCommandInput{
@@ -41,9 +42,10 @@ func ExecuteCommand(cfg aws.Config, cluster, taskArn, container, runtimeId strin
 
 	resp, err := executeCommandAPI(context.TODO(), client, input)
 	if err != nil {
-		fmt.Println("Got an error retrieving execute command:")
-		fmt.Println(err)
-		os.Exit(1)
+		log := logging.Log()
+		log.Error().Err(err).Msg("Got an error retrieving execute command:")
+
+		return err
 	}
 
 	sess, _ := json.Marshal(resp.Session)
@@ -70,4 +72,6 @@ func ExecuteCommand(cfg aws.Config, cluster, taskArn, container, runtimeId strin
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	cmd.Run()
+
+	return nil
 }

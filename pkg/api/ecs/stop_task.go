@@ -3,8 +3,8 @@ package ecs
 import (
 	"context"
 	"fmt"
-	"os"
 
+	"awsh/internal/logging"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
 )
@@ -24,7 +24,7 @@ Stops the tasks of the selected cluster.
 
 For aws cli -> aws ecs stop-task
 */
-func StopTask(cfg aws.Config, cluster, taskArn string) {
+func StopTask(cfg aws.Config, cluster, taskArn string) error {
 	client := ecs.NewFromConfig(cfg)
 	input := &ecs.StopTaskInput{
 		Cluster: &cluster,
@@ -33,10 +33,13 @@ func StopTask(cfg aws.Config, cluster, taskArn string) {
 
 	_, err := stopTaskAPI(context.TODO(), client, input)
 	if err != nil {
-		fmt.Println("Got an error retrieving task:")
-		fmt.Println(err)
-		os.Exit(1)
+		log := logging.Log()
+		log.Error().Err(err).Msg("Got an error retrieving task:")
+
+		return err
 	}
 
 	fmt.Println("Done. Bye!")
+
+	return nil
 }
