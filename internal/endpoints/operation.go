@@ -5,7 +5,7 @@ import (
 )
 
 // Returns the name of the action for the resource being operated on.
-func Operation() string {
+func (r *Route) Operation() string {
 	const promptDescription = "Select an action"
 	// 操作対象のAWSリソース群
 	or := []string{"S3", "ECS"}

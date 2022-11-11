@@ -7,7 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 )
 
-func StopEcsTask(cfg aws.Config) error {
+func (s *ECS) StopEcsTask(cfg aws.Config) error {
 	listClusters, err := ecsapi.ListClusters(cfg)
 	if err != nil {
 		return err

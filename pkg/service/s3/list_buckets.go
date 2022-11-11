@@ -9,7 +9,7 @@ import (
 )
 
 // Outputs information about the bucket passed as argument.
-func ListBuckets(cfg aws.Config) error {
+func (s *S3) ListBuckets(cfg aws.Config) error {
 	listBuckets, err := s3api.ListBuckets(cfg)
 	if err != nil {
 		return err

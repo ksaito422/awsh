@@ -8,7 +8,10 @@ import (
 )
 
 // Routing of operation actions on AWS resources.
-func Controller(cfg aws.Config, action string) error {
+func (r *Route) Controller(cfg aws.Config, action string) error {
+	s3 := s3.NewS3Service(&s3.S3{})
+	ecs := ecs.NewECSService(&ecs.ECS{})
+
 	switch action {
 	// S3
 	case "ListBuckets":

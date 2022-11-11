@@ -10,7 +10,7 @@ import (
 )
 
 // Output the bucket and object list information passed as arguments.
-func DownloadObject(cfg aws.Config) error {
+func (s *S3) DownloadObject(cfg aws.Config) error {
 	listBuckets, err := s3api.ListBuckets(cfg)
 	if err != nil {
 		return err
