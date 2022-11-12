@@ -1,3 +1,4 @@
+//go:generate mockgen -source=$GOFILE -package=mock_$GOPACKAGE -destination=../../mock/$GOPACKAGE/$GOFILE
 package endpoints
 
 import "github.com/aws/aws-sdk-go-v2/aws"
