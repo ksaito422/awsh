@@ -15,7 +15,8 @@ func main() {
 	r := endpoints.NewAppController(&endpoints.Route{})
 	// Select resources and actions to be manipulated, and controller the main process.
 	action := r.Operation()
-	if err := r.Controller(cfg, action); err != nil {
+	v := endpoints.Index(action)
+	if err := r.Controller(cfg, v); err != nil {
 		log := logging.Log()
 		log.Debug().Stack().Err(err)
 	}

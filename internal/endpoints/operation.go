@@ -8,24 +8,28 @@ import (
 func (r *Route) Operation() string {
 	const promptDescription = "Select an action"
 	// 操作対象のAWSリソース群
-	or := []string{"S3", "ECS"}
+	or := []string{
+		string(S3),
+		string(ECS),
+	}
+
 	var action string
 	resource := prompt.ChooseValueFromPromptItems("Select the resource to be operated", or)
 
 	switch resource {
 	case "S3":
 		actions := []string{
-			"ListBuckets",
-			"ListObjects",
-			"DownloadObject",
+			ListBuckets.String(),
+			ListObjects.String(),
+			DownloadObject.String(),
 		}
 
 		action = prompt.ChooseValueFromPromptItems(promptDescription, actions)
 	case "ECS":
 		actions := []string{
-			"StartECS",
-			"ecs-exec",
-			"StopECSTask",
+			StartECS.String(),
+			ECS_EXEC.String(),
+			StopECSTask.String(),
 		}
 
 		action = prompt.ChooseValueFromPromptItems(promptDescription, actions)

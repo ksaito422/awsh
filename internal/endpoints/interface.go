@@ -3,7 +3,7 @@ package endpoints
 import "github.com/aws/aws-sdk-go-v2/aws"
 
 type AppController interface {
-	Controller(aws.Config, string) error
+	Controller(aws.Config, Operation) error
 	Operation() string
 }
 
