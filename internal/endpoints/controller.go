@@ -1,6 +1,8 @@
 package endpoints
 
 import (
+	"errors"
+
 	"awsh/pkg/service/ecs"
 	"awsh/pkg/service/s3"
 
@@ -8,35 +10,38 @@ import (
 )
 
 // Routing of operation actions on AWS resources.
-func Controller(cfg aws.Config, action string) error {
+func (r *Route) Controller(cfg aws.Config, action Operation) error {
+	s3 := s3.NewS3Service(&s3.S3{})
+	ecs := ecs.NewECSService(&ecs.ECS{})
+
 	switch action {
 	// S3
-	case "ListBuckets":
+	case ListBuckets:
 		err := s3.ListBuckets(cfg)
 		return err
 
-	case "ListObjects":
+	case ListObjects:
 		err := s3.ListObjects(cfg)
 		return err
 
-	case "DownloadObject":
+	case DownloadObject:
 		err := s3.DownloadObject(cfg)
 		return err
 
 	// ECS
-	case "StartECS":
+	case StartECS:
 		err := ecs.StartEcs(cfg)
 		return err
 
-	case "ecs-exec":
+	case ECS_EXEC:
 		err := ecs.EcsExec(cfg)
 		return err
 
-	case "StopECSTask":
+	case StopECSTask:
 		err := ecs.StopEcsTask(cfg)
 		return err
 
 	default:
-		return nil
+		return errors.New("予期せぬ条件に一致しました")
 	}
 }

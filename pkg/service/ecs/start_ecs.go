@@ -7,7 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 )
 
-func StartEcs(cfg aws.Config) error {
+func (s *ECS) StartEcs(cfg aws.Config) error {
 	// TODO: リファクタする
 	subnetId, err := ec2api.DescribeSubnets(cfg)
 	if err != nil {
