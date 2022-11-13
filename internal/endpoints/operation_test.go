@@ -33,7 +33,7 @@ func TestOperation(t *testing.T) {
 
 				resp := m.Operation()
 				if resp != tt.out {
-					t.Errorf("#%d: got: %#v want: %#v", i, resp, tt.out)
+					t.Errorf("#%d: want: %#v, got: %#v", i, tt.out, resp)
 				}
 			})
 
@@ -49,7 +49,7 @@ func TestOperation(t *testing.T) {
 		want := "string"
 		got := reflect.TypeOf(resp).String()
 		if want != got {
-			t.Errorf("got: %v, want: %v", got, want)
+			t.Errorf("want: %#v, got: %#v", want, got)
 		}
 	})
 }

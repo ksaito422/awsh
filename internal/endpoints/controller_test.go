@@ -79,11 +79,11 @@ func TestController(t *testing.T) {
 				err := m.Controller(cfg, endpoints.Operation(tt.in))
 				// 0の場合にcaseに一致した場合
 				if endpoints.Undefined == endpoints.Operation(tt.in) && err == nil {
-					t.Errorf("想定外のcaseに一致: want = %v, but got = %v", endpoints.Undefined, endpoints.Operation(tt.in))
+					t.Errorf("想定外のcaseに一致: #%d, want: %#v, got = %#v", i, endpoints.Undefined, endpoints.Operation(tt.in))
 				}
 				// 1以上の場合にerrがリターンされた場合
 				if endpoints.Undefined != endpoints.Operation(tt.in) && err != nil {
-					t.Errorf("operation = %v, want = %d, but got = %d", err, i, tt.in)
+					t.Errorf("#%d, want: %d, got: %d", i, err, tt.in)
 				}
 			})
 		})
