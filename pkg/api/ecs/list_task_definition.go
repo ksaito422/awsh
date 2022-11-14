@@ -20,7 +20,7 @@ func GetAllTaskDefinitions(c context.Context, api ECSListTaskDefinitionsAPI, inp
 
 // Returns data for the selected ecs task definition.
 // For aws cli -> aws ecs list-task-definitions
-func ListTaskDefinitions(cfg aws.Config) (*ecs.ListTaskDefinitionsOutput, error) {
+func (s *ecsApi) ListTaskDefinitions(cfg aws.Config) (*ecs.ListTaskDefinitionsOutput, error) {
 	client := ecs.NewFromConfig(cfg)
 
 	input := &ecs.ListTaskDefinitionsInput{}

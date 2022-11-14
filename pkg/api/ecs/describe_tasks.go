@@ -21,7 +21,7 @@ func describeTasksAPI(c context.Context, api ECSDescribeTasksAPI, input *ecs.Des
 
 // Returns detailed data for the selected ecs task.
 // For aws cli -> aws ecs describe-tasks
-func DescribeTasks(cfg aws.Config, cluster, taskArn string) (*ecs.DescribeTasksOutput, error) {
+func (s *ecsApi) DescribeTasks(cfg aws.Config, cluster, taskArn string) (*ecs.DescribeTasksOutput, error) {
 	client := ecs.NewFromConfig(cfg)
 	taskArr := []string{taskArn}
 	input := &ecs.DescribeTasksInput{

@@ -1,6 +1,10 @@
 package ecs
 
-import "github.com/aws/aws-sdk-go-v2/aws"
+import (
+	"awsh/pkg/api/ecs"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
+)
 
 type ECSServicer interface {
 	StartEcs(aws.Config) error
@@ -8,11 +12,11 @@ type ECSServicer interface {
 	StopEcsTask(aws.Config) error
 }
 
-type ECS struct {
-	service ECSServicer
+type ECSService struct {
+	Api ecs.ECSApi
 }
 
 // constructor関数
-func NewECSService(s ECSServicer) *ECS {
-	return &ECS{service: s}
+func NewECSService(s ecs.ECSApi) *ECSService {
+	return &ECSService{Api: s}
 }

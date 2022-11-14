@@ -29,7 +29,7 @@ Connect to the selected container with ecs-exec.
 
 For aws cli -> aws ecs execute-command
 */
-func ExecuteCommand(cfg aws.Config, cluster, taskArn, container, runtimeId string) error {
+func (s *ecsApi) ExecuteCommand(cfg aws.Config, cluster, taskArn, container, runtimeId string) error {
 	client := ecs.NewFromConfig(cfg)
 	sh := "/bin/sh"
 	input := &ecs.ExecuteCommandInput{

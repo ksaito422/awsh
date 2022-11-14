@@ -12,31 +12,45 @@ import (
 	gomock "github.com/golang/mock/gomock"
 )
 
-// MockS3API is a mock of S3API interface.
-type MockS3API struct {
+// MockS3Api is a mock of S3Api interface.
+type MockS3Api struct {
 	ctrl     *gomock.Controller
-	recorder *MockS3APIMockRecorder
+	recorder *MockS3ApiMockRecorder
 }
 
-// MockS3APIMockRecorder is the mock recorder for MockS3API.
-type MockS3APIMockRecorder struct {
-	mock *MockS3API
+// MockS3ApiMockRecorder is the mock recorder for MockS3Api.
+type MockS3ApiMockRecorder struct {
+	mock *MockS3Api
 }
 
-// NewMockS3API creates a new mock instance.
-func NewMockS3API(ctrl *gomock.Controller) *MockS3API {
-	mock := &MockS3API{ctrl: ctrl}
-	mock.recorder = &MockS3APIMockRecorder{mock}
+// NewMockS3Api creates a new mock instance.
+func NewMockS3Api(ctrl *gomock.Controller) *MockS3Api {
+	mock := &MockS3Api{ctrl: ctrl}
+	mock.recorder = &MockS3ApiMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockS3API) EXPECT() *MockS3APIMockRecorder {
+func (m *MockS3Api) EXPECT() *MockS3ApiMockRecorder {
 	return m.recorder
 }
 
+// DownloadObject mocks base method.
+func (m *MockS3Api) DownloadObject(arg0 aws.Config, arg1 string, arg2 *s3.ListObjectsV2Output) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DownloadObject", arg0, arg1, arg2)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DownloadObject indicates an expected call of DownloadObject.
+func (mr *MockS3ApiMockRecorder) DownloadObject(arg0, arg1, arg2 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DownloadObject", reflect.TypeOf((*MockS3Api)(nil).DownloadObject), arg0, arg1, arg2)
+}
+
 // ListBuckets mocks base method.
-func (m *MockS3API) ListBuckets(arg0 aws.Config) (*s3.ListBucketsOutput, error) {
+func (m *MockS3Api) ListBuckets(arg0 aws.Config) (*s3.ListBucketsOutput, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListBuckets", arg0)
 	ret0, _ := ret[0].(*s3.ListBucketsOutput)
@@ -45,7 +59,22 @@ func (m *MockS3API) ListBuckets(arg0 aws.Config) (*s3.ListBucketsOutput, error) 
 }
 
 // ListBuckets indicates an expected call of ListBuckets.
-func (mr *MockS3APIMockRecorder) ListBuckets(arg0 interface{}) *gomock.Call {
+func (mr *MockS3ApiMockRecorder) ListBuckets(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListBuckets", reflect.TypeOf((*MockS3API)(nil).ListBuckets), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListBuckets", reflect.TypeOf((*MockS3Api)(nil).ListBuckets), arg0)
+}
+
+// ListObjects mocks base method.
+func (m *MockS3Api) ListObjects(arg0 aws.Config, arg1 string) (*s3.ListObjectsV2Output, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListObjects", arg0, arg1)
+	ret0, _ := ret[0].(*s3.ListObjectsV2Output)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListObjects indicates an expected call of ListObjects.
+func (mr *MockS3ApiMockRecorder) ListObjects(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListObjects", reflect.TypeOf((*MockS3Api)(nil).ListObjects), arg0, arg1)
 }

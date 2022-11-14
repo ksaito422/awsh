@@ -2,13 +2,12 @@ package ecs
 
 import (
 	"awsh/internal/logging"
-	ecsapi "awsh/pkg/api/ecs"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 )
 
-func (s *ECS) EcsExec(cfg aws.Config) error {
-	listClusters, err := ecsapi.ListClusters(cfg)
+func (s *ECSService) EcsExec(cfg aws.Config) error {
+	listClusters, err := s.Api.ListClusters(cfg)
 	if err != nil {
 		return err
 	}
@@ -21,7 +20,7 @@ func (s *ECS) EcsExec(cfg aws.Config) error {
 	}
 
 	clusterArn := SelectClusterArn(listClusters)
-	listTaskDefs, err := ecsapi.ListTaskDefinitions(cfg)
+	listTaskDefs, err := s.Api.ListTaskDefinitions(cfg)
 	if err != nil {
 		return err
 	}
@@ -34,12 +33,12 @@ func (s *ECS) EcsExec(cfg aws.Config) error {
 	}
 
 	taskDef := SelectTaskDefinition(listTaskDefs)
-	taskDefDetail, err := ecsapi.DescribeTaskDefinition(cfg, taskDef)
+	taskDefDetail, err := s.Api.DescribeTaskDefinition(cfg, taskDef)
 	if err != nil {
 		return err
 	}
 
-	listTasks, err := ecsapi.ListTasks(cfg, clusterArn, *taskDefDetail.Family)
+	listTasks, err := s.Api.ListTasks(cfg, clusterArn, *taskDefDetail.Family)
 	if err != nil {
 		return err
 	}
@@ -52,14 +51,14 @@ func (s *ECS) EcsExec(cfg aws.Config) error {
 	}
 
 	taskArn := SelectTaskArn(listTasks)
-	taskDetail, err := ecsapi.DescribeTasks(cfg, clusterArn, taskArn)
+	taskDetail, err := s.Api.DescribeTasks(cfg, clusterArn, taskArn)
 	if err != nil {
 		return nil
 	}
 
 	containerName := SelectTaskContainer(taskDetail)
 	runtimeId := SelectRuntimeId(taskDetail)
-	if err := ecsapi.ExecuteCommand(cfg, clusterArn, taskArn, containerName, runtimeId); err != nil {
+	if err := s.Api.ExecuteCommand(cfg, clusterArn, taskArn, containerName, runtimeId); err != nil {
 		return err
 	}
 
