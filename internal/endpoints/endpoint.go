@@ -1,14 +1,22 @@
 package endpoints
 
 import (
-	s3ser "awsh/pkg/service/s3"
+	"awsh/pkg/service/ecs"
+	"awsh/pkg/service/s3"
 )
 
 type Route struct {
-	Service s3ser.S3Servicer
+	S3  s3.S3Servicer
+	ECS ecs.ECSServicer
 }
 
 // constructor関数
-func NewAppController(r s3ser.S3Servicer) *Route {
-	return &Route{Service: r}
+func NewAppController(
+	s3 s3.S3Servicer,
+	ecs ecs.ECSServicer,
+) *Route {
+	return &Route{
+		S3:  s3,
+		ECS: ecs,
+	}
 }
