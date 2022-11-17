@@ -4,7 +4,9 @@ import (
 	"fmt"
 
 	"awsh/internal/logging"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"golang.org/x/xerrors"
 )
 
 // Outputs information about the bucket passed as argument.
@@ -19,7 +21,7 @@ func (s *S3Service) ListBuckets(cfg aws.Config) error {
 		log := logging.Log()
 		log.Info().Msg("No buckets")
 
-		return nil
+		return xerrors.Errorf("No buckets")
 	}
 
 	for _, bucket := range listBuckets.Buckets {
