@@ -24,7 +24,7 @@ Stops the tasks of the selected cluster.
 
 For aws cli -> aws ecs stop-task
 */
-func StopTask(cfg aws.Config, cluster, taskArn string) error {
+func (s *ecsApi) StopTask(cfg aws.Config, cluster, taskArn string) error {
 	client := ecs.NewFromConfig(cfg)
 	input := &ecs.StopTaskInput{
 		Cluster: &cluster,

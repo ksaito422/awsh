@@ -57,7 +57,7 @@ func (c *DownloadS3Client) DownloadSingleObject(bucket, key string) error {
 }
 
 // Download selected objects.
-func DownloadObject(cfg aws.Config, bucket string, objects *s3.ListObjectsV2Output) error {
+func (s *s3Api) DownloadObject(cfg aws.Config, bucket string, objects *s3.ListObjectsV2Output) error {
 	ss := new(S3ObjectsName)
 	for _, item := range objects.Contents {
 		ss.Set(*item.Key)

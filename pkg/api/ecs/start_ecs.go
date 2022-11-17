@@ -25,7 +25,7 @@ Starts a task based on the selected arguments.
 
 For aws cli -> aws ecs run-task
 */
-func StartContainer(cfg aws.Config, cluster, taskArn, subnetId string) error {
+func (s *ecsApi) StartContainer(cfg aws.Config, cluster, taskArn, subnetId string) error {
 	client := ecs.NewFromConfig(cfg)
 	// TODO: セキュリティグループも指定する
 	input := &ecs.RunTaskInput{

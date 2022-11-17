@@ -3,11 +3,10 @@ package ecs
 import (
 	"awsh/internal/logging"
 	ec2api "awsh/pkg/api/ec2"
-	ecsapi "awsh/pkg/api/ecs"
 	"github.com/aws/aws-sdk-go-v2/aws"
 )
 
-func (s *ECS) StartEcs(cfg aws.Config) error {
+func (s *ECSService) StartEcs(cfg aws.Config) error {
 	// TODO: リファクタする
 	subnetId, err := ec2api.DescribeSubnets(cfg)
 	if err != nil {
@@ -18,7 +17,7 @@ func (s *ECS) StartEcs(cfg aws.Config) error {
 		return err
 	}
 
-	listClusters, err := ecsapi.ListClusters(cfg)
+	listClusters, err := s.Api.ListClusters(cfg)
 	if err != nil {
 		return err
 	}
@@ -31,7 +30,7 @@ func (s *ECS) StartEcs(cfg aws.Config) error {
 	}
 
 	clusterArn := SelectClusterArn(listClusters)
-	listTaskDefs, err := ecsapi.ListTaskDefinitions(cfg)
+	listTaskDefs, err := s.Api.ListTaskDefinitions(cfg)
 	if err != nil {
 		return err
 	}
@@ -44,13 +43,13 @@ func (s *ECS) StartEcs(cfg aws.Config) error {
 	}
 
 	taskDef := SelectTaskDefinition(listTaskDefs)
-	taskDefDetail, err := ecsapi.DescribeTaskDefinition(cfg, taskDef)
+	taskDefDetail, err := s.Api.DescribeTaskDefinition(cfg, taskDef)
 	if err != nil {
 		return err
 	}
 
 	// TODO: 起動するタスクにアタッチするセキュリティグループを後で渡す
-	if err := ecsapi.StartContainer(cfg, clusterArn, *taskDefDetail.TaskDefinitionArn, *subnetId); err != nil {
+	if err := s.Api.StartContainer(cfg, clusterArn, *taskDefDetail.TaskDefinitionArn, *subnetId); err != nil {
 		return err
 	}
 

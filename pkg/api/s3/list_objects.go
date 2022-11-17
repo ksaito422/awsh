@@ -20,7 +20,7 @@ func getAllObjects(c context.Context, api s3ListObjectsAPI, input *s3.ListObject
 
 // Returns data from the selected objects.
 // For aws cli -> aws s3 list-object
-func ListObjects(cfg aws.Config, bucket string) (*s3.ListObjectsV2Output, error) {
+func (s *s3Api) ListObjects(cfg aws.Config, bucket string) (*s3.ListObjectsV2Output, error) {
 	client := s3.NewFromConfig(cfg)
 	// 引数で指定したバケット内のオブジェクトの取得
 	bucket_input := &s3.ListObjectsV2Input{

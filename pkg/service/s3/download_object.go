@@ -4,14 +4,13 @@ import (
 	"fmt"
 
 	"awsh/internal/logging"
-	s3api "awsh/pkg/api/s3"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 )
 
 // Output the bucket and object list information passed as arguments.
-func (s *S3) DownloadObject(cfg aws.Config) error {
-	listBuckets, err := s3api.ListBuckets(cfg)
+func (s *S3Service) DownloadObject(cfg aws.Config) error {
+	listBuckets, err := s.Api.ListBuckets(cfg)
 	if err != nil {
 		return err
 	}
@@ -25,7 +24,7 @@ func (s *S3) DownloadObject(cfg aws.Config) error {
 	}
 
 	bucketName := SelectBucketName(listBuckets)
-	listObjects, err := s3api.ListObjects(cfg, bucketName)
+	listObjects, err := s.Api.ListObjects(cfg, bucketName)
 	if err != nil {
 		return err
 	}
@@ -38,7 +37,7 @@ func (s *S3) DownloadObject(cfg aws.Config) error {
 		return nil
 	}
 
-	if err := s3api.DownloadObject(cfg, bucketName, listObjects); err != nil {
+	if err := s.Api.DownloadObject(cfg, bucketName, listObjects); err != nil {
 		return err
 	}
 
