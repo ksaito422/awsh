@@ -23,7 +23,7 @@ func (s *S3Service) DownloadObject(cfg aws.Config) error {
 		return nil
 	}
 
-	bucketName := SelectBucketName(listBuckets)
+	bucketName := s.Api.SelectBucketName(listBuckets)
 	listObjects, err := s.Api.ListObjects(cfg, bucketName)
 	if err != nil {
 		return err

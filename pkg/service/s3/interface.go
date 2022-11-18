@@ -2,7 +2,7 @@
 package s3
 
 import (
-	"awsh/pkg/api/s3"
+	s3 "awsh/pkg/api/s3"
 	"github.com/aws/aws-sdk-go-v2/aws"
 )
 

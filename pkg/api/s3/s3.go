@@ -15,7 +15,7 @@ func (l *s3BucketsName) Set(v string) {
 }
 
 // Receives a value of type ListBucketsOutput in the argument and returns bucket name in string.
-func SelectBucketName(input *s3.ListBucketsOutput) string {
+func (s *s3Api) SelectBucketName(input *s3.ListBucketsOutput) string {
 	ls := new(s3BucketsName)
 	for _, bucket := range input.Buckets {
 		ls.Set(*bucket.Name)
