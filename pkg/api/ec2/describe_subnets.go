@@ -1,7 +1,6 @@
 package ec2
 
 import (
-	"awsh/internal/logging"
 	"awsh/pkg/prompt"
 	"context"
 	"strconv"
@@ -40,10 +39,7 @@ func DescribeSubnets(cfg aws.Config) (*string, error) {
 
 	resp, err := describeSubnets(context.TODO(), client, input)
 	if err != nil {
-		log := logging.Log()
-		log.Error().Err(err).Msg("Got an error retrieving describe subnets:")
-
-		return nil, err
+		return nil, errFetchSubnet
 	}
 
 	ss := new(Subnets)
