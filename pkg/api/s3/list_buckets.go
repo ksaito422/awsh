@@ -3,7 +3,6 @@ package s3
 import (
 	"context"
 
-	"awsh/internal/logging"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
@@ -26,10 +25,7 @@ func (s *s3Api) ListBuckets(cfg aws.Config) (*s3.ListBucketsOutput, error) {
 
 	resp, err := getAllBuckets(context.TODO(), client, input)
 	if err != nil {
-		log := logging.Log()
-		log.Error().Err(err).Msg("Got an error retrieving buckets:")
-
-		return nil, err
+		return nil, errFetchBucket
 	}
 
 	return resp, nil

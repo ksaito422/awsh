@@ -4,7 +4,6 @@ import (
 	"context"
 	"os"
 
-	"awsh/internal/logging"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
@@ -67,10 +66,7 @@ func (s *s3Api) DownloadObject(cfg aws.Config, bucket string, objects *s3.ListOb
 
 	client := NewDownloadS3Client(cfg)
 	if err := client.DownloadSingleObject(bucket, object); err != nil {
-		log := logging.Log()
-		log.Error().Err(err).Msg("An error occurred while downloading the object")
-
-		return err
+		return errDownloadObject
 	}
 
 	return nil

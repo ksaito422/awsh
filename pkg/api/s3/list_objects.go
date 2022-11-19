@@ -3,7 +3,6 @@ package s3
 import (
 	"context"
 
-	"awsh/internal/logging"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
@@ -29,10 +28,7 @@ func (s *s3Api) ListObjects(cfg aws.Config, bucket string) (*s3.ListObjectsV2Out
 
 	resp, err := getAllObjects(context.TODO(), client, bucket_input)
 	if err != nil {
-		log := logging.Log()
-		log.Error().Err(err).Msg("Got error retrieving list of objects:")
-
-		return nil, err
+		return nil, errFetchObject
 	}
 
 	return resp, nil
