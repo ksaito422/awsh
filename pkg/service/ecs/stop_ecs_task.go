@@ -1,8 +1,6 @@
 package ecs
 
 import (
-	"awsh/internal/logging"
-
 	"github.com/aws/aws-sdk-go-v2/aws"
 )
 
@@ -13,10 +11,7 @@ func (s *ECSService) StopEcsTask(cfg aws.Config) error {
 	}
 	// ECS clusterが一つもない場合
 	if len(listClusters.ClusterArns) == 0 {
-		log := logging.Log()
-		log.Info().Msg("Doesn't exist ECS cluster")
-
-		return nil
+		return noEcsCluster
 	}
 
 	clusterArn := SelectClusterArn(listClusters)
@@ -26,10 +21,7 @@ func (s *ECSService) StopEcsTask(cfg aws.Config) error {
 	}
 	// Task definitionが一つもない場合
 	if len(listTaskDefs.TaskDefinitionArns) == 0 {
-		log := logging.Log()
-		log.Info().Msg("Doesn't exist ECS task definition")
-
-		return nil
+		return noTaskDefinition
 	}
 
 	taskDef := SelectTaskDefinition(listTaskDefs)
@@ -44,10 +36,7 @@ func (s *ECSService) StopEcsTask(cfg aws.Config) error {
 	}
 	// task listが一つもない場合
 	if len(listTasks.TaskArns) == 0 {
-		log := logging.Log()
-		log.Info().Msg("Doesn't exist ECS task")
-
-		return nil
+		return noEcsTask
 	}
 
 	taskArn := SelectTaskArn(listTasks)

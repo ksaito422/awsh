@@ -4,6 +4,13 @@ import (
 	"awsh/pkg/prompt"
 
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
+	"golang.org/x/xerrors"
+)
+
+var (
+	noEcsCluster     = xerrors.New("ECS cluster does not exist.")
+	noEcsTask        = xerrors.New("ECS task does not exist.")
+	noTaskDefinition = xerrors.New("Task definition does not exist.")
 )
 
 type ecsClustersName struct {
