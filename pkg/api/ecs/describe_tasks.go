@@ -1,7 +1,6 @@
 package ecs
 
 import (
-	"awsh/internal/logging"
 	"context"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -31,10 +30,7 @@ func (s *ecsApi) DescribeTasks(cfg aws.Config, cluster, taskArn string) (*ecs.De
 
 	resp, err := describeTasksAPI(context.TODO(), client, input)
 	if err != nil {
-		log := logging.Log()
-		log.Error().Err(err).Msg("Got an error retrieving describe tasks:")
-
-		return nil, err
+		return nil, errDescribeTask
 	}
 
 	return resp, nil

@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"awsh/internal/logging"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
 	"github.com/aws/aws-sdk-go-v2/service/ecs/types"
@@ -43,10 +42,7 @@ func (s *ecsApi) StartContainer(cfg aws.Config, cluster, taskArn, subnetId strin
 
 	_, err := myRunTask(context.TODO(), client, input)
 	if err != nil {
-		log := logging.Log()
-		log.Error().Err(err).Msg("Got an error retrieving buckets:")
-
-		return nil
+		return errRunTask
 	}
 
 	fmt.Println("Done. Bye!")

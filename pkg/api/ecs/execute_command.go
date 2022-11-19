@@ -8,7 +8,6 @@ import (
 	"os/exec"
 	"os/signal"
 
-	"awsh/internal/logging"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
@@ -42,10 +41,7 @@ func (s *ecsApi) ExecuteCommand(cfg aws.Config, cluster, taskArn, container, run
 
 	resp, err := executeCommandAPI(context.TODO(), client, input)
 	if err != nil {
-		log := logging.Log()
-		log.Error().Err(err).Msg("Got an error retrieving execute command:")
-
-		return err
+		return errExecuteCommand
 	}
 
 	sess, _ := json.Marshal(resp.Session)

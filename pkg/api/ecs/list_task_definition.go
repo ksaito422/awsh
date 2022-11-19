@@ -3,7 +3,6 @@ package ecs
 import (
 	"context"
 
-	"awsh/internal/logging"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
 )
@@ -27,10 +26,7 @@ func (s *ecsApi) ListTaskDefinitions(cfg aws.Config) (*ecs.ListTaskDefinitionsOu
 
 	resp, err := GetAllTaskDefinitions(context.TODO(), client, input)
 	if err != nil {
-		log := logging.Log()
-		log.Error().Err(err).Msg("Got an error retrieving clusters:")
-
-		return nil, err
+		return nil, errGetAllTask
 	}
 
 	return resp, nil
