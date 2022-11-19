@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"golang.org/x/xerrors"
 )
 
 // Routing of operation actions on AWS resources.
@@ -11,16 +12,22 @@ func (r *Route) Controller(cfg aws.Config, action Operation) error {
 	switch action {
 	// S3
 	case ListBuckets:
-		err := r.S3.ListBuckets(cfg)
-		return err
+		if err := r.S3.ListBuckets(cfg); err != nil {
+			return xerrors.Errorf("%w", err)
+		}
+		return nil
 
 	case ListObjects:
-		err := r.S3.ListObjects(cfg)
-		return err
+		if err := r.S3.ListObjects(cfg); err != nil {
+			return xerrors.Errorf("%w", err)
+		}
+		return nil
 
 	case DownloadObject:
-		err := r.S3.DownloadObject(cfg)
-		return err
+		if err := r.S3.DownloadObject(cfg); err != nil {
+			return xerrors.Errorf("%w", err)
+		}
+		return nil
 
 	// ECS
 	case StartECS:

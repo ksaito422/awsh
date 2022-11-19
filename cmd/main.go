@@ -25,7 +25,9 @@ func main() {
 	action := r.Operation()
 	v := endpoints.Index(action)
 	if err := r.Controller(cfg, v); err != nil {
-		log := logging.Log()
+		// TODO: -debugでデバッグモードなるようにする
+		log, _ := logging.Log(os.Args[1:]...)
+		log.Error().Err(err).Msg("")
 		log.Debug().Stack().Err(err)
 	}
 
