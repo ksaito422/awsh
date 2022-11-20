@@ -25,10 +25,10 @@ func main() {
 	action := r.Operation()
 	v := endpoints.Index(action)
 	if err := r.Controller(cfg, v); err != nil {
-		// TODO: -debugでデバッグモードなるようにする
-		log, _ := logging.Log(os.Args[1:]...)
+		log := logging.Log()
 		log.Error().Err(err).Msg("")
-		log.Debug().Stack().Err(err)
+		// TODO: デバッグモードでスタックトレース出した方が良いかも
+		log.Debug().Stack().Err(err).Msg("")
 	}
 
 	os.Exit(0)
