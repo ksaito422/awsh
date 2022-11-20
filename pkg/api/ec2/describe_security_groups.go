@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"awsh/internal/logging"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 )
@@ -38,10 +37,7 @@ func DescribeSecurityGroups(cfg aws.Config) error {
 
 	resp, err := describeSecurityGroups(context.TODO(), client, input)
 	if err != nil {
-		log := logging.Log()
-		log.Error().Err(err).Msg("Got an error retrieving describe security groups:")
-
-		return err
+		return errFetchSG
 	}
 
 	ss := new(SecurityGroups)

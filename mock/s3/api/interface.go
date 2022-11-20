@@ -78,3 +78,17 @@ func (mr *MockS3ApiMockRecorder) ListObjects(arg0, arg1 interface{}) *gomock.Cal
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListObjects", reflect.TypeOf((*MockS3Api)(nil).ListObjects), arg0, arg1)
 }
+
+// SelectBucketName mocks base method.
+func (m *MockS3Api) SelectBucketName(arg0 *s3.ListBucketsOutput) string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SelectBucketName", arg0)
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// SelectBucketName indicates an expected call of SelectBucketName.
+func (mr *MockS3ApiMockRecorder) SelectBucketName(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SelectBucketName", reflect.TypeOf((*MockS3Api)(nil).SelectBucketName), arg0)
+}

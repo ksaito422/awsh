@@ -26,7 +26,9 @@ func main() {
 	v := endpoints.Index(action)
 	if err := r.Controller(cfg, v); err != nil {
 		log := logging.Log()
-		log.Debug().Stack().Err(err)
+		log.Error().Err(err).Msg("")
+		// TODO: デバッグモードでスタックトレース出した方が良いかも
+		log.Debug().Stack().Err(err).Msg("")
 	}
 
 	os.Exit(0)

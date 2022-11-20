@@ -6,21 +6,13 @@ import (
 
 	"awsh/mock/s3/api"
 	s3ser "awsh/pkg/service/s3"
+	"awsh/testutil"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
 	"github.com/golang/mock/gomock"
 )
-
-func Ptr(x any) *string {
-	switch v := x.(type) {
-	case string:
-		return &v
-	default:
-		return nil
-	}
-}
 
 func TestListBucketsService(t *testing.T) {
 	ctrl := gomock.NewController(t)
@@ -32,7 +24,7 @@ func TestListBucketsService(t *testing.T) {
 		m.EXPECT().
 			ListBuckets(gomock.Any()).
 			Return(&s3.ListBucketsOutput{
-				Buckets: []types.Bucket{{Name: Ptr("test")}},
+				Buckets: []types.Bucket{{Name: testutil.Ptr("test")}},
 			}, nil)
 
 		// 上のmockを使用するように代入

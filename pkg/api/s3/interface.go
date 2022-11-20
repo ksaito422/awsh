@@ -10,6 +10,7 @@ type S3Api interface {
 	ListBuckets(aws.Config) (*s3.ListBucketsOutput, error)
 	ListObjects(aws.Config, string) (*s3.ListObjectsV2Output, error)
 	DownloadObject(aws.Config, string, *s3.ListObjectsV2Output) error
+	SelectBucketName(*s3.ListBucketsOutput) string
 }
 
 type s3Api struct{}

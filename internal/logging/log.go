@@ -5,29 +5,28 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/pkgerrors"
+)
+
+var (
+	debug = flag.Bool("debug", false, "sets log level to debug")
 )
 
 func Log() zerolog.Logger {
 	zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
 
 	// 出力形式の設定
-	output := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC3339}
-	output.FormatLevel = func(i interface{}) string {
+	output := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: "2006-01-02 15:04:05"}
+	output.FormatLevel = func(i any) string {
 		return strings.ToUpper(fmt.Sprintf("| %-6s|", i))
-	}
-	output.FormatFieldName = func(i interface{}) string {
-		return fmt.Sprintf("%s:", i)
 	}
 
 	log := zerolog.New(output).With().Timestamp().Logger()
 
 	// ログレベルの設定
 	// 通常はinfo以上を出力。-debugの場合ログレベルをdebug以上に変更する
-	debug := flag.Bool("debug", false, "sets log level to debug")
 	flag.Parse()
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	if *debug {

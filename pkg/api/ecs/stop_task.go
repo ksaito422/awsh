@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"awsh/internal/logging"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecs"
 )
@@ -33,10 +32,7 @@ func (s *ecsApi) StopTask(cfg aws.Config, cluster, taskArn string) error {
 
 	_, err := stopTaskAPI(context.TODO(), client, input)
 	if err != nil {
-		log := logging.Log()
-		log.Error().Err(err).Msg("Got an error retrieving task:")
-
-		return err
+		return errStopTask
 	}
 
 	fmt.Println("Done. Bye!")

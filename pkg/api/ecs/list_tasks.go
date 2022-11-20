@@ -1,7 +1,6 @@
 package ecs
 
 import (
-	"awsh/internal/logging"
 	"context"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -37,10 +36,7 @@ func (s *ecsApi) ListTasks(cfg aws.Config, cluster, family string) (*ecs.ListTas
 
 	resp, err := listTaskAPI(context.TODO(), client, input)
 	if err != nil {
-		log := logging.Log()
-		log.Error().Err(err).Msg("Got an error retrieving list tasks:")
-
-		return nil, err
+		return nil, errListTask
 	}
 
 	return resp, nil
