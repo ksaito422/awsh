@@ -3,6 +3,7 @@ package s3_test
 import (
 	"errors"
 	"testing"
+	"time"
 
 	"awsh/mock/s3/api"
 	s3ser "awsh/pkg/service/s3"
@@ -19,7 +20,6 @@ func TestListObjectsService(t *testing.T) {
 	defer ctrl.Finish()
 
 	t.Run("OK", func(t *testing.T) {
-		t.Skip() // TODO: プロンプト選択のSelectBucketNameをモックする
 		cfg := aws.Config{}
 		m := mock_s3.NewMockS3Api(ctrl)
 		m.EXPECT().
@@ -29,8 +29,19 @@ func TestListObjectsService(t *testing.T) {
 			}, nil)
 
 		m.EXPECT().
+			SelectBucketName(gomock.Any()).
+			Return("test")
+
+		m.EXPECT().
 			ListObjects(gomock.Any(), gomock.Any()).
-			Return(nil, nil)
+			Return(&s3.ListObjectsV2Output{
+				Contents: []types.Object{{
+					Key:          testutil.Ptr("key"),
+					LastModified: testutil.Ptr(time.Now()),
+					Size:         1,
+					StorageClass: types.ObjectStorageClassStandard,
+				}},
+			}, nil)
 
 		s := &s3ser.S3Service{}
 		s.Api = m
@@ -47,15 +58,15 @@ func TestListObjectsService(t *testing.T) {
 			m := mock_s3.NewMockS3Api(ctrl)
 			m.EXPECT().
 				ListBuckets(gomock.Any()).
-				Return(&s3.ListBucketsOutput{}, errors.New("error"))
+				Return(&s3.ListBucketsOutput{}, errors.New("aws sdkからエラーが返った"))
 
 			// 上のmockを使用するように代入
 			s := &s3ser.S3Service{}
 			s.Api = m
 
-			err := s.ListBuckets(cfg)
+			err := s.ListObjects(cfg)
 			if err == nil {
-				t.Errorf("想定外のnil: %v", err)
+				t.Errorf("想定外のnil")
 			}
 		})
 
@@ -65,19 +76,74 @@ func TestListObjectsService(t *testing.T) {
 			m.EXPECT().
 				ListBuckets(gomock.Any()).
 				Return(&s3.ListBucketsOutput{
-					Buckets: []types.Bucket{},
+					Buckets: nil,
 				}, nil)
 
 			// 上のmockを使用するように代入
 			s := &s3ser.S3Service{}
 			s.Api = m
 
-			err := s.ListBuckets(cfg)
+			err := s.ListObjects(cfg)
 			if err == nil {
 				t.Errorf("想定外のnil:")
 			}
 		})
 
-		// TODO: プロンプトモックしたら、その先のテスト書く
+		t.Run("aws sdk listobjectsからエラーが返った場合", func(t *testing.T) {
+			cfg := aws.Config{}
+			m := mock_s3.NewMockS3Api(ctrl)
+			m.EXPECT().
+				ListBuckets(gomock.Any()).
+				Return(&s3.ListBucketsOutput{
+					Buckets: []types.Bucket{{Name: testutil.Ptr("test")}},
+				}, nil)
+
+			m.EXPECT().
+				SelectBucketName(gomock.Any()).
+				Return("test")
+
+			m.EXPECT().
+				ListObjects(gomock.Any(), gomock.Any()).
+				Return(nil, errors.New("aws sdkからエラーが返った"))
+
+			// 上のmockを使用するように代入
+			s := &s3ser.S3Service{}
+			s.Api = m
+
+			err := s.ListObjects(cfg)
+			if err == nil {
+				t.Errorf("想定外のnil:")
+			}
+		})
+
+		t.Run("aws sdk listobjectsの返り値が0件の場合", func(t *testing.T) {
+			cfg := aws.Config{}
+			m := mock_s3.NewMockS3Api(ctrl)
+			m.EXPECT().
+				ListBuckets(gomock.Any()).
+				Return(&s3.ListBucketsOutput{
+					Buckets: []types.Bucket{{Name: testutil.Ptr("test")}},
+				}, nil)
+
+			m.EXPECT().
+				SelectBucketName(gomock.Any()).
+				Return("test")
+
+			m.EXPECT().
+				ListObjects(gomock.Any(), gomock.Any()).
+				Return(&s3.ListObjectsV2Output{
+					Contents: nil,
+				}, nil)
+
+			// 上のmockを使用するように代入
+			s := &s3ser.S3Service{}
+			s.Api = m
+
+			err := s.ListObjects(cfg)
+			if err == nil {
+				t.Errorf("想定外のnil:")
+			}
+		})
+
 	})
 }
