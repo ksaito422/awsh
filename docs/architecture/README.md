@@ -2,18 +2,19 @@
 
 ```
 awsh/
-├ cmd/mani.go
+├ main.go
 ├ docs/
 ├ internal/
 │ 	└ endpoints/
 ├ pkg/*
-├ tests/
+├ mock/
+├ testutil/
 └ Makefile
 
 ```
 
-- cmd/main.go
-  - アプリのエントリーポイント
+- main.go
+  - CLIのエントリーポイント
 - docs
   - ドキュメントの格納
 - internal
@@ -24,7 +25,9 @@ awsh/
 - pkg
   - あらゆるところから参照されるパッケージ
   - メインの処理がほとんど配下に置かれる
-- tests
-  - テスト用
+- mock
+  - テストで使うmock(gomock)
+- testutil
+  - テストで使う関数
 - Makefile
   - 各種エイリアスコマンド
