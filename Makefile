@@ -1,7 +1,7 @@
 run:
-	go run cmd/*.go
+	go run ./...
 build:
-	go build -o awsh cmd/main.go
+	go build -o awsh ./main.go
 mod:
 	go mod tidy
 doc: # localhost:6060
