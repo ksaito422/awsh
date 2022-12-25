@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"os"
 
 	"awsh/internal/endpoints"
@@ -12,7 +14,13 @@ import (
 	s3ser "awsh/pkg/service/s3"
 )
 
+var (
+	version string
+)
+
 func main() {
+	option()
+
 	endpoints.Welcome()
 	cfg := config.Cfg()
 
@@ -32,4 +40,18 @@ func main() {
 	}
 
 	os.Exit(0)
+}
+
+func option() {
+	var showVersion bool
+
+	flag.BoolVar(&showVersion, "v", false, "show version")
+	flag.BoolVar(&showVersion, "version", false, "show version")
+	flag.Parse()
+
+	// -v,-versionオプションでversionを表示する
+	if showVersion {
+		fmt.Println("awsh version: ", version)
+		os.Exit(0)
+	}
 }
