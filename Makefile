@@ -1,7 +1,9 @@
 run:
 	go run ./...
+tags:
+	git describe --tags --abbrev=0
 build:
-	go build -o awsh ./main.go
+	go build  -ldflags "-X main.version=$$(git describe --tags --abbrev=0)" -o awsh ./main.go
 mod:
 	go mod tidy
 doc: # localhost:6060
