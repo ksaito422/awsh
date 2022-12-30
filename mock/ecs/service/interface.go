@@ -47,31 +47,3 @@ func (mr *MockECSServicerMockRecorder) EcsExec(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EcsExec", reflect.TypeOf((*MockECSServicer)(nil).EcsExec), arg0)
 }
-
-// StartEcs mocks base method.
-func (m *MockECSServicer) StartEcs(arg0 aws.Config) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "StartEcs", arg0)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// StartEcs indicates an expected call of StartEcs.
-func (mr *MockECSServicerMockRecorder) StartEcs(arg0 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "StartEcs", reflect.TypeOf((*MockECSServicer)(nil).StartEcs), arg0)
-}
-
-// StopEcsTask mocks base method.
-func (m *MockECSServicer) StopEcsTask(arg0 aws.Config) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "StopEcsTask", arg0)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// StopEcsTask indicates an expected call of StopEcsTask.
-func (mr *MockECSServicerMockRecorder) StopEcsTask(arg0 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "StopEcsTask", reflect.TypeOf((*MockECSServicer)(nil).StopEcsTask), arg0)
-}

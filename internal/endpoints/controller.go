@@ -28,22 +28,10 @@ func (r *Route) Controller(cfg aws.Config, action Operation) error {
 		return nil
 
 	// ECS
-	case StartECS:
-		if err := r.ECS.StartEcs(cfg); err != nil {
-			return err
-		}
-		return nil
-
 	case ECS_EXEC:
 		if err := r.ECS.EcsExec(cfg); err != nil {
 			return err
 
-		}
-		return nil
-
-	case StopECSTask:
-		if err := r.ECS.StopEcsTask(cfg); err != nil {
-			return err
 		}
 		return nil
 
