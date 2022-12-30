@@ -27,9 +27,7 @@ func (r *Route) Operation() string {
 		action = prompt.ChooseValueFromPromptItems(promptDescription, actions)
 	case "ECS":
 		actions := []string{
-			StartECS.String(),
 			ECS_EXEC.String(),
-			StopECSTask.String(),
 		}
 
 		action = prompt.ChooseValueFromPromptItems(promptDescription, actions)

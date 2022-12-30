@@ -8,9 +8,7 @@ import (
 )
 
 type ECSServicer interface {
-	StartEcs(aws.Config) error
 	EcsExec(aws.Config) error
-	StopEcsTask(aws.Config) error
 }
 
 type ECSService struct {

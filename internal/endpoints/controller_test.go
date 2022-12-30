@@ -45,19 +45,9 @@ func TestController(t *testing.T) {
 				f:    mockS3.EXPECT().DownloadObject(gomock.Any()).Return(nil),
 			},
 			{
-				name: "StartECS",
-				in:   4,
-				f:    mockEcs.EXPECT().StartEcs(gomock.Any()).Return(nil),
-			},
-			{
 				name: "ecs-exec",
 				in:   5,
 				f:    mockEcs.EXPECT().EcsExec(gomock.Any()).Return(nil),
-			},
-			{
-				name: "StopECSTask",
-				in:   6,
-				f:    mockEcs.EXPECT().StopEcsTask(gomock.Any()).Return(nil),
 			},
 		}
 
@@ -115,19 +105,9 @@ func TestController(t *testing.T) {
 				f:    mockS3.EXPECT().DownloadObject(gomock.Any()).Return(errors.New("error")),
 			},
 			{
-				name: "StartECS",
-				in:   4,
-				f:    mockEcs.EXPECT().StartEcs(gomock.Any()).Return(errors.New("error")),
-			},
-			{
 				name: "ecs-exec",
 				in:   5,
 				f:    mockEcs.EXPECT().EcsExec(gomock.Any()).Return(errors.New("error")),
-			},
-			{
-				name: "StopECSTask",
-				in:   6,
-				f:    mockEcs.EXPECT().StopEcsTask(gomock.Any()).Return(errors.New("error")),
 			},
 		}
 

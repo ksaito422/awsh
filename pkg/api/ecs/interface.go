@@ -13,8 +13,6 @@ type ECSApi interface {
 	ListClusters(aws.Config) (*ecs.ListClustersOutput, error)
 	ListTaskDefinitions(aws.Config) (*ecs.ListTaskDefinitionsOutput, error)
 	ListTasks(aws.Config, string, string) (*ecs.ListTasksOutput, error)
-	StartContainer(aws.Config, string, string, string) error
-	StopTask(aws.Config, string, string) error
 }
 
 type ecsApi struct{}
