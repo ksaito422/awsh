@@ -56,7 +56,7 @@ func (s *ecsApi) ExecuteCommand(cfg aws.Config, cluster, taskArn, container, run
 	cmd := exec.Command(
 		"session-manager-plugin",
 		string(sess),
-		"ap-northeast-1",
+		cfg.Region,
 		"StartSession",
 		"",
 		string(targetJSON),
