@@ -11,14 +11,6 @@ import (
 	"awsh/pkg/prompt"
 )
 
-type S3ObjectsName struct {
-	List []string
-}
-
-func (m *S3ObjectsName) Set(value string) {
-	m.List = append(m.List, value)
-}
-
 type S3GetObjectAPI interface {
 	GetObject(ctx context.Context,
 		params *s3.GetObjectInput,
@@ -29,7 +21,11 @@ func GetObjects(c context.Context, api S3GetObjectAPI, input *s3.GetObjectInput)
 	return api.GetObject(c, input)
 }
 
-// aws s3api get-object
+/*
+Returns data from the selected object.
+
+For aws cli -> aws s3api get-object
+*/
 func GetObject(cfg aws.Config, bucket string, objects *s3.ListObjectsV2Output) *s3.GetObjectOutput {
 	ss := new(S3ObjectsName)
 	for _, item := range objects.Contents {

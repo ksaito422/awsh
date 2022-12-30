@@ -1,10 +1,11 @@
-package welcome
+package endpoints
 
 import (
 	"fmt"
 )
 
-func Main() {
+// Welcome screen to be displayed after entering a command.
+func Welcome() {
 	fmt.Print("    ####       ###             ###      #####      ##         \n")
 	fmt.Print("   ######       ##     ###     ##      ##   ##     ##         \n")
 	fmt.Print("  ##    ##       ##   ## ##   ##       ##          ## ###     \n")
