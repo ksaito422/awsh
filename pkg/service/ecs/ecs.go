@@ -11,6 +11,7 @@ var (
 	noEcsCluster     = xerrors.New("ECS cluster does not exist.")
 	noEcsTask        = xerrors.New("ECS task does not exist.")
 	noTaskDefinition = xerrors.New("Task definition does not exist.")
+	noEcsContainer = xerrors.New("ECS Container doce not exist.")
 )
 
 type ecsClustersName struct {
@@ -70,13 +71,36 @@ func SelectTaskArn(input *ecs.ListTasksOutput) string {
 	return taskArn
 }
 
+type ecsType struct {
+	List []string
+}
+
+func (m *ecsType) Set(value string) {
+	m.List = append(m.List, value)
+}
+
 // Receives a value of type DescribeTasksOutput in the argument and returns container name in string.
 func SelectTaskContainer(input *ecs.DescribeTasksOutput) string {
-	// TODO: 引数のnullチェック入れる
-	return *input.Tasks[0].Containers[0].Name
+	ls := new(ecsType)
+	for _, task := range input.Tasks {
+		for _, container := range task.Containers {
+			ls.Set(*container.Name)
+		}
+	}
+
+	taskContainer := prompt.ChooseValueFromPromptItems("Select ECS Container Name", ls.List)
+	return taskContainer
 }
 
 // Receives a value of type DescribeTasksOutput in the argument and returns runtime id in string.
 func SelectRuntimeId(input *ecs.DescribeTasksOutput) string {
-	return *input.Tasks[0].Containers[0].RuntimeId
+	ls := new(ecsType)
+	for _, task := range input.Tasks {
+		for _, container := range task.Containers {
+			ls.Set(*container.RuntimeId)
+		}
+	}
+
+	taskRuntimeID := prompt.ChooseValueFromPromptItems("Select ECS RuntimeID", ls.List)
+	return taskRuntimeID
 }

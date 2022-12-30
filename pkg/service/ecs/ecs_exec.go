@@ -42,7 +42,11 @@ func (s *ECSService) EcsExec(cfg aws.Config) error {
 	taskArn := SelectTaskArn(listTasks)
 	taskDetail, err := s.Api.DescribeTasks(cfg, clusterArn, taskArn)
 	if err != nil {
-		return nil
+		return err
+	}
+	// task detailが一つもない場合
+	if len(taskDetail.Tasks) == 0 {
+		return noEcsContainer
 	}
 
 	containerName := SelectTaskContainer(taskDetail)
