@@ -1,5 +1,7 @@
 # awsh
 
+👾This one is under development.
+
 Tool to ease aws cli operation.
 
 ## Usage
@@ -22,6 +24,6 @@ https://github.com/saitooooooo/awsh/releases
 
 ## Function description
 
-I will add this in the future...
+📝I will add this in the future...
 
 <!-- TODO: 主な機能説明をディレクトリ作ってREADMEに書いて、リンク貼る -->
